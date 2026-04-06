@@ -26,7 +26,7 @@ export default function GatePage() {
       ("standalone" in navigator &&
         (navigator as { standalone?: boolean }).standalone === true);
 
-    if (isStandalone) { router.replace("/formation"); return; }
+    if (isStandalone) { router.replace("/welcome"); return; }
     if (/iPhone|iPad|iPod/.test(ua)) setPlatform("ios");
     else if (/Android/.test(ua))     setPlatform("android");
     else                             setPlatform("desktop");
