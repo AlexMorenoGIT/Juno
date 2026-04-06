@@ -2,8 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { MuseoModerno, Poetsen_One, Poppins } from "next/font/google";
 import "./globals.css";
-import { SplashScreen }   from "@/components/ui/SplashScreen";
-import { InstallPrompt }  from "@/components/ui/InstallPrompt";
+import { SplashScreen } from "@/components/ui/SplashScreen";
 
 // ── Polices ──────────────────────────────────────────────────────────────────
 
@@ -110,7 +109,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-poppins bg-slate-950">
         <SplashScreen />
         {children}
-        <InstallPrompt />
       </body>
     </html>
   );

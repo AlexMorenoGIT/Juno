@@ -1,17 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
-interface BeforeInstallPromptEvent extends Event {
-  prompt(): Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
-}
-
-declare global {
-  interface Window {
-    __deferredInstallPrompt: BeforeInstallPromptEvent | null;
-  }
-}
+import type {} from "@/types/pwa";
 
 const DISMISSED_KEY = "juno-install-dismissed";
 
@@ -66,7 +56,6 @@ export function InstallPrompt() {
       <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
         style={{ background: "rgba(255,140,0,0.12)", border: "1px solid rgba(255,140,0,0.2)" }}
       >
-        {/* Icône download simple */}
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF8C00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
           <polyline points="7 10 12 15 17 10"/>
