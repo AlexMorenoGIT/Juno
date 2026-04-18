@@ -124,7 +124,7 @@ export default function WelcomePage() {
       return;
     }
 
-    router.replace("/home");
+    router.replace("/formation");
     router.refresh();
   }
 
@@ -176,7 +176,7 @@ export default function WelcomePage() {
       return;
     }
 
-    router.replace("/home");
+    router.replace("/formation");
     router.refresh();
   }
 
@@ -474,6 +474,7 @@ export default function WelcomePage() {
                           type="email"
                           autoComplete="email"
                           required
+                          placeholder="prenom@juno.app"
                           value={login.email}
                           onChange={(v) => setLogin({ ...login, email: v })}
                         />
@@ -482,6 +483,7 @@ export default function WelcomePage() {
                           type={showPwd ? "text" : "password"}
                           autoComplete="current-password"
                           required
+                          placeholder="••••••••"
                           value={login.password}
                           onChange={(v) => setLogin({ ...login, password: v })}
                           rightIcon={
@@ -530,6 +532,7 @@ export default function WelcomePage() {
                           type="text"
                           autoComplete="given-name"
                           required
+                          placeholder="Alex"
                           value={signup.firstName}
                           onChange={(v) => setSignup({ ...signup, firstName: v })}
                         />
@@ -538,6 +541,7 @@ export default function WelcomePage() {
                           type="text"
                           autoComplete="family-name"
                           required
+                          placeholder="Moreno"
                           value={signup.lastName}
                           onChange={(v) => setSignup({ ...signup, lastName: v })}
                         />
@@ -546,6 +550,7 @@ export default function WelcomePage() {
                           type="email"
                           autoComplete="email"
                           required
+                          placeholder="prenom@juno.app"
                           value={signup.email}
                           onChange={(v) => setSignup({ ...signup, email: v })}
                         />
@@ -554,6 +559,7 @@ export default function WelcomePage() {
                           type={showPwd ? "text" : "password"}
                           autoComplete="new-password"
                           required
+                          placeholder="••••••••"
                           value={signup.password}
                           onChange={(v) => setSignup({ ...signup, password: v })}
                           rightIcon={
@@ -568,6 +574,7 @@ export default function WelcomePage() {
                           type={showPwd2 ? "text" : "password"}
                           autoComplete="new-password"
                           required
+                          placeholder="••••••••"
                           value={signup.confirmPassword}
                           onChange={(v) => setSignup({ ...signup, confirmPassword: v })}
                           rightIcon={
@@ -610,6 +617,7 @@ function AuthInput({
   onChange,
   autoComplete,
   required,
+  placeholder,
   rightIcon,
 }: {
   label: string;
@@ -618,6 +626,7 @@ function AuthInput({
   onChange: (v: string) => void;
   autoComplete?: string;
   required?: boolean;
+  placeholder?: string;
   rightIcon?: React.ReactNode;
 }) {
   return (
@@ -635,7 +644,8 @@ function AuthInput({
           onChange={(e) => onChange(e.target.value)}
           autoComplete={autoComplete}
           required={required}
-          className="block w-full font-poppins text-[14px] text-slate-900 focus:outline-none"
+          placeholder={placeholder}
+          className="block w-full font-poppins text-[14px] text-slate-900 placeholder:text-slate-300 placeholder:font-normal focus:outline-none"
           style={{
             height: 40,
             paddingLeft: 20,
@@ -689,8 +699,8 @@ function EyeToggle({ visible, onClick }: { visible: boolean; onClick: () => void
           aria-hidden
           className="absolute block"
           style={{
-            width: 22,
-            height: 1.4,
+            width: 16,
+            height: 1.2,
             background: "currentColor",
             top: "50%",
             left: "50%",
