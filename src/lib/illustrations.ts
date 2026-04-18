@@ -19,6 +19,7 @@ export const illustrations = {
   cube:          "/illustrations/Cube.png",
   cube2:         "/illustrations/Cube-2.png",
   cylinder:      "/illustrations/Cylinder.png",
+  cylindreTeal:  "/illustrations/Cylindre-teal.png",
   glass:         "/illustrations/Glass.png",
   glasses:       "/illustrations/Glasses.png",
   polyhedron:    "/illustrations/Polyhedron.png",
