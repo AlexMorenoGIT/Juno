@@ -204,7 +204,7 @@ interface NavIconProps { tab: NavTab; isActive: boolean; isGlass: boolean }
 
 function NavIcon({ tab, isActive, isGlass }: NavIconProps) {
   const color  = isGlass ? "white" : isActive ? "white" : "#727272";
-  const glow   = "drop-shadow(0 0 7px rgba(255,255,255,0.95)) drop-shadow(0 0 2px rgba(255,255,255,1)) drop-shadow(0 4px 8px rgba(0,0,0,0.5))";
+  const glow   = "drop-shadow(0 0 5px rgba(255,255,255,0.55)) drop-shadow(0 3px 6px rgba(0,0,0,0.35))";
   const noGlow = "drop-shadow(0 0 0px rgba(255,255,255,0))";
 
   const IconComp = {
@@ -219,7 +219,6 @@ function NavIcon({ tab, isActive, isGlass }: NavIconProps) {
       animate={{
         opacity: isGlass && !isActive ? 0.55 : 1,
         filter: isActive ? glow : noGlow,
-        scale:  isActive ? 1.08 : 1,
       }}
       transition={{ duration: 0.22, ease: "easeOut" }}
       style={{ display: "flex" }}

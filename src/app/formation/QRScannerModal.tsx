@@ -191,11 +191,11 @@ export function QRScannerModal({ onClose }: Props) {
         <ScanLine />
       </div>
 
-      {/* ── CTA blanc juste AU-DESSUS du cadre ─────────────────── */}
+      {/* ── CTA blanc juste EN-DESSOUS du cadre ────────────────── */}
       <div
         className="absolute left-1/2 -translate-x-1/2 z-20 flex flex-col items-center"
         style={{
-          top: `calc(50% - ${SCAN_SIZE / 2}px - 100px)`,
+          top: `calc(50% + ${SCAN_SIZE / 2}px + 32px)`,
           width: `${SCAN_SIZE}px`,
         }}
       >
@@ -309,14 +309,14 @@ function ScanLine() {
   const OVERSHOOT = 40; // dépasse au-dessus
   return (
     <motion.div
-      className="absolute left-0 right-0"
+      className="absolute left-0 right-0 top-0 will-change-transform"
       style={{ height: 3 + TRAIL, pointerEvents: "none" }}
-      initial={false}
+      initial={{ y: SCAN_SIZE }}
       animate={{
-        top: [
-          `${SCAN_SIZE}px`,
-          `${-OVERSHOOT}px`,
-          `${SCAN_SIZE}px`,
+        y: [
+          SCAN_SIZE,
+          -OVERSHOOT,
+          SCAN_SIZE,
         ],
       }}
       transition={{

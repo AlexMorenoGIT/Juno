@@ -19,7 +19,10 @@ export function FormationClient() {
   const [scannerOpen, setScannerOpen] = useState(false);
 
   return (
-    <div className="fixed inset-0 flex flex-col bg-white overflow-hidden">
+    <div
+      className="fixed inset-0 flex flex-col bg-white overflow-hidden"
+      style={{ paddingTop: "env(safe-area-inset-top)" }}
+    >
       {/* ── Titre ────────────────────────────────────────────────── */}
       <header className="px-6 py-8 shrink-0">
         <h1 className="text-slate-900 text-[32px] leading-[1.15]">
