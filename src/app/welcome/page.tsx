@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useDragControls } from "framer-motion";
 import Image from "next/image";
 import { Logo } from "@/components/brand/Logo";
+import { Icon } from "@/components/ui/Icon";
 import { illustrations } from "@/lib/illustrations";
+
+type AuthMode = "login" | "signup";
 
 /* ── Géométrie ───────────────────────────────────────────────────────── */
 
@@ -81,6 +84,10 @@ const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function WelcomePage() {
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [mode, setMode] = useState<AuthMode>("login");
+  const [showPwd, setShowPwd] = useState(false);
+  const [showPwd2, setShowPwd2] = useState(false);
+  const dragControls = useDragControls();
 
   return (
     <div
@@ -284,9 +291,9 @@ export default function WelcomePage() {
               onClick={() => setSheetOpen(false)}
             />
             <motion.div
-              className="fixed left-0 right-0 bottom-0 z-50 bg-white rounded-t-3xl"
+              className="fixed left-0 right-0 bottom-0 z-50 bg-white rounded-t-3xl flex flex-col"
               style={{
-                minHeight: "55dvh",
+                maxHeight: "92dvh",
                 paddingBottom: "max(1.5rem, env(safe-area-inset-bottom))",
                 boxShadow: "0 -12px 40px rgba(0,0,0,0.18)",
               }}
@@ -295,6 +302,8 @@ export default function WelcomePage() {
               exit={{ y: "100%" }}
               transition={{ type: "spring", stiffness: 320, damping: 34 }}
               drag="y"
+              dragControls={dragControls}
+              dragListener={false}
               dragConstraints={{ top: 0, bottom: 0 }}
               dragElastic={{ top: 0, bottom: 0.6 }}
               onDragEnd={(_, info) => {
@@ -303,14 +312,235 @@ export default function WelcomePage() {
                 }
               }}
             >
-              <div className="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing">
+              {/* Drag handle (seule zone qui déclenche le drag) */}
+              <div
+                onPointerDown={(e) => dragControls.start(e)}
+                className="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing touch-none shrink-0"
+              >
                 <div className="w-10 h-1.5 rounded-full bg-slate-200" />
               </div>
-              {/* Contenu de la sheet — à remplir ensuite */}
+
+              {/* Contenu scrollable */}
+              <div
+                className="overflow-y-auto flex-1"
+                style={{ paddingTop: 32, paddingLeft: 20, paddingRight: 20 }}
+              >
+                {/* Toggle login/signup */}
+                <div
+                  className="flex rounded-full"
+                  style={{
+                    border: "0.5px solid var(--color-slate-300)",
+                    padding: 3,
+                  }}
+                >
+                  <button
+                    onClick={() => setMode("login")}
+                    className={`flex-1 rounded-full text-[13px] font-poppins font-medium transition-colors ${
+                      mode === "login" ? "bg-deep-900 text-white" : "text-slate-700"
+                    }`}
+                    style={{ padding: 6 }}
+                  >
+                    J&apos;ai déjà un compte
+                  </button>
+                  <button
+                    onClick={() => setMode("signup")}
+                    className={`flex-1 rounded-full text-[13px] font-poppins font-medium transition-colors ${
+                      mode === "signup" ? "bg-deep-900 text-white" : "text-slate-700"
+                    }`}
+                    style={{ padding: 6 }}
+                  >
+                    Je m&apos;inscris
+                  </button>
+                </div>
+
+                {/* Form */}
+                <AnimatePresence mode="wait">
+                  {mode === "login" ? (
+                    <motion.div
+                      key="login"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.2 }}
+                      className="mt-7"
+                    >
+                      <h2 className="font-poetsen text-slate-900" style={{ fontSize: 24 }}>
+                        Content de te revoir <span aria-hidden>👋</span>
+                      </h2>
+
+                      <div className="mt-5 space-y-3">
+                        <AuthInput type="email" placeholder="Email" />
+                        <AuthInput
+                          type={showPwd ? "text" : "password"}
+                          placeholder="Mot de passe"
+                          rightIcon={
+                            <EyeToggle
+                              visible={showPwd}
+                              onClick={() => setShowPwd((v) => !v)}
+                            />
+                          }
+                        />
+                      </div>
+
+                      <div className="mt-2 text-right">
+                        <span className="font-poppins text-[13px] text-slate-400">
+                          Oups… j&apos;ai oublié mon mot de passe
+                        </span>
+                      </div>
+
+                      <PrimaryBtn label="Connexion" className="mt-5" />
+
+                      <SocialRow />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="signup"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.2 }}
+                      className="mt-7"
+                    >
+                      <h2 className="font-poetsen text-slate-900" style={{ fontSize: 24 }}>
+                        Ravi de te rencontrer <span aria-hidden>👋</span>
+                      </h2>
+
+                      <div className="mt-5 space-y-3">
+                        <AuthInput type="text" placeholder="Prénom" />
+                        <AuthInput type="text" placeholder="Nom" />
+                        <AuthInput type="email" placeholder="Email" />
+                        <AuthInput
+                          type={showPwd ? "text" : "password"}
+                          placeholder="Mot de passe"
+                          rightIcon={
+                            <EyeToggle
+                              visible={showPwd}
+                              onClick={() => setShowPwd((v) => !v)}
+                            />
+                          }
+                        />
+                        <AuthInput
+                          type={showPwd2 ? "text" : "password"}
+                          placeholder="Confirmer le mot de passe"
+                          rightIcon={
+                            <EyeToggle
+                              visible={showPwd2}
+                              onClick={() => setShowPwd2((v) => !v)}
+                            />
+                          }
+                        />
+                      </div>
+
+                      <PrimaryBtn label="Créer mon compte" className="mt-5" />
+
+                      <SocialRow />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </motion.div>
           </>
         )}
       </AnimatePresence>
+    </div>
+  );
+}
+
+/* ── Sous-composants sheet ──────────────────────────────────────────── */
+
+function AuthInput({
+  type,
+  placeholder,
+  rightIcon,
+}: {
+  type: string;
+  placeholder: string;
+  rightIcon?: React.ReactNode;
+}) {
+  return (
+    <div className="relative">
+      <input
+        type={type}
+        placeholder={placeholder}
+        className="w-full font-poppins text-[14px] text-slate-900 placeholder:text-slate-300 focus:outline-none"
+        style={{
+          height: 40,
+          paddingLeft: 20,
+          paddingRight: rightIcon ? 44 : 20,
+          borderRadius: 8,
+          border: "1px solid var(--color-slate-600)",
+          background: "transparent",
+        }}
+      />
+      {rightIcon && (
+        <div className="absolute right-3 top-1/2 -translate-y-1/2">{rightIcon}</div>
+      )}
+    </div>
+  );
+}
+
+function EyeToggle({ visible, onClick }: { visible: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={visible ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+      className="relative inline-flex items-center justify-center text-slate-900"
+      style={{ width: 22, height: 22 }}
+    >
+      <Icon name="eye" size={20} />
+      {!visible && (
+        <span
+          aria-hidden
+          className="absolute"
+          style={{
+            width: 24,
+            height: 1.4,
+            background: "currentColor",
+            transform: "rotate(-45deg)",
+          }}
+        />
+      )}
+    </button>
+  );
+}
+
+function PrimaryBtn({ label, className = "" }: { label: string; className?: string }) {
+  return (
+    <motion.button
+      className={`w-full h-12 font-poppins font-semibold text-white text-[15px] ${className}`}
+      style={{
+        background: "var(--color-june-600)",
+        borderRadius: 8,
+        boxShadow: "0 6px 20px rgba(255,140,0,0.28)",
+      }}
+      whileTap={{ scale: 0.98 }}
+    >
+      {label}
+    </motion.button>
+  );
+}
+
+function SocialRow() {
+  return (
+    <div className="flex justify-center mt-5" style={{ gap: 10 }}>
+      {(["google", "apple-brand", "facebook"] as const).map((name) => (
+        <button
+          key={name}
+          type="button"
+          aria-label={name}
+          className="flex items-center justify-center bg-slate-200 text-slate-900"
+          style={{
+            borderRadius: 12,
+            paddingLeft: 44,
+            paddingRight: 44,
+            paddingTop: 14,
+            paddingBottom: 14,
+          }}
+        >
+          <Icon name={name} size={22} />
+        </button>
+      ))}
     </div>
   );
 }
