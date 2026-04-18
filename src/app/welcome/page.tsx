@@ -17,9 +17,9 @@ const CORE_DY = 42;
 // Orbite des 6 éléments — juste en dehors du cercle 2 (r=110)
 const INNER_R = 128;
 
-// Cercle 3 : grand cercle dont seul le haut est visible
-const OUTER_R = 320;
-const OUTER_CY = 170; // centre du cercle 3 → plus haut qu'avant
+// Cercle 3 : rayon plus petit + centre moins profond → arc plus arrondi
+const OUTER_R = 210;
+const OUTER_CY = 30;
 
 const rad = (d: number) => (d * Math.PI) / 180;
 
@@ -69,10 +69,10 @@ const INNER_ITEMS: OrbitItem[] = [
 
 // 4 éléments sur l'arc du cercle 3 (partie haute uniquement)
 const OUTER_ITEMS: OrbitItem[] = [
-  onOuter(-32, 70, 70, -4, -6, 7.0, 8,  "shape",  illustrations.spiral),
-  onOuter(-10, 54, 54, 3,  -5, 6.4, 0,  "avatar", "/avatars/avatar-red.png"),
-  onOuter(12,  74, 74, -3, -5, 7.6, -10, "shape", illustrations.polyhedron),
-  onOuter(32,  52, 52, 4,  -4, 6.8, 0,  "avatar", "/avatars/avatar-beard.png"),
+  onOuter(-38, 70, 70, -4, -6, 7.0, 8,  "shape",  illustrations.spiral),
+  onOuter(-13, 54, 54, 3,  -5, 6.4, 0,  "avatar", "/avatars/avatar-red.png"),
+  onOuter(13,  74, 74, -3, -5, 7.6, -10, "shape", illustrations.polyhedron),
+  onOuter(38,  52, 52, 4,  -4, 6.8, 0,  "avatar", "/avatars/avatar-beard.png"),
 ];
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -84,7 +84,7 @@ export default function WelcomePage() {
 
   return (
     <div
-      className="relative h-dvh overflow-hidden flex flex-col select-none"
+      className="relative h-[100svh] overflow-hidden flex flex-col select-none"
       style={{
         background: [
           // Halo violet haut-gauche — plus gros & plus diffus
@@ -96,7 +96,7 @@ export default function WelcomePage() {
       }}
     >
       {/* ── Scène ──────────────────────────────────────────────────── */}
-      <div className="relative flex-1 flex items-center justify-center pt-6">
+      <div className="relative flex-1 min-h-0 flex items-center justify-center pt-4">
         {/* Ancre zéro-dimension au centre de la scène */}
         <div className="relative" style={{ width: 0, height: 0 }}>
 
@@ -197,13 +197,23 @@ export default function WelcomePage() {
                     <Image
                       src={it.src}
                       alt=""
-                      width={it.w}
-                      height={it.h}
+                      width={it.w * 2}
+                      height={it.h * 2}
+                      quality={100}
+                      unoptimized
                       className="w-full h-full object-cover"
                     />
                   </div>
                 ) : (
-                  <Image src={it.src} alt="" width={it.w} height={it.h} />
+                  <Image
+                    src={it.src}
+                    alt=""
+                    width={it.w * 2}
+                    height={it.h * 2}
+                    quality={100}
+                    unoptimized
+                    style={{ width: it.w, height: it.h }}
+                  />
                 )}
               </motion.div>
             );
@@ -213,8 +223,8 @@ export default function WelcomePage() {
 
       {/* ── Texte + CTA ────────────────────────────────────────────── */}
       <motion.div
-        className="relative z-10 px-7"
-        style={{ paddingBottom: "max(2.75rem, calc(env(safe-area-inset-bottom) + 1.5rem))" }}
+        className="relative z-10 px-7 shrink-0"
+        style={{ paddingBottom: "max(4rem, calc(env(safe-area-inset-bottom) + 2.5rem))" }}
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6, duration: 0.55, ease }}
@@ -232,7 +242,7 @@ export default function WelcomePage() {
             letterSpacing: "-0.01em",
           }}
         >
-          Bienvenue sur
+          bienvenue sur
           <br />
           <span
             style={{
