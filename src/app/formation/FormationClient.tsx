@@ -56,12 +56,11 @@ export function FormationClient({ firstName }: Props) {
               <button
                 key={c.id}
                 type="button"
-                onClick={() => setCategory(c.id)}
                 aria-pressed={isActive}
-                className={`whitespace-nowrap rounded-full px-6 py-2.5 font-poppins text-[12px] font-semibold text-slate-600 border transition-colors ${
+                className={`whitespace-nowrap rounded-full px-6 py-2.5 font-poppins text-[12px] font-semibold border transition-colors ${
                   isActive
-                    ? "bg-white border-slate-600"
-                    : "bg-slate-50 border-slate-300"
+                    ? "bg-white border-slate-600 text-slate-600"
+                    : "bg-slate-50 border-slate-300 text-slate-300"
                 }`}
               >
                 {c.label}
@@ -76,7 +75,7 @@ export function FormationClient({ firstName }: Props) {
         type="button"
         onClick={() => setScannerOpen(true)}
         aria-label="Entrer dans la formation"
-        className="relative flex-1 w-full mt-6 cursor-pointer overflow-hidden"
+        className="relative flex-1 w-full mt-6 cursor-pointer overflow-hidden rounded-t-4xl"
       >
         <Image
           src="/covers/formation-desk.png"

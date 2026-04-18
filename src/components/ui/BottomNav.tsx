@@ -55,7 +55,8 @@ export function BottomNav({
         onClick={() => onTabChange(id)}
         aria-label={TAB_LABELS[id]}
         aria-current={isActive ? "page" : undefined}
-        className="flex-1 flex items-center justify-center h-[76px] cursor-pointer"
+        className="flex-1 flex items-center justify-center h-[76px] cursor-pointer bg-transparent border-0 outline-none focus:outline-none focus-visible:outline-none"
+        style={{ WebkitTapHighlightColor: "transparent" }}
       >
         <NavIcon tab={id} isActive={isActive} isGlass={isGlass} />
       </button>
