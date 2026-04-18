@@ -8,10 +8,5 @@ export default async function FormationPage() {
 
   if (!user) redirect("/welcome");
 
-  const firstName =
-    (user.user_metadata?.first_name as string | undefined) ??
-    user.email?.split("@")[0] ??
-    "";
-
-  return <FormationClient firstName={firstName} />;
+  return <FormationClient />;
 }

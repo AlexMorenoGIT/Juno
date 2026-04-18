@@ -52,11 +52,17 @@ export function BottomNav({
     return (
       <button
         key={id}
+        type="button"
         onClick={() => onTabChange(id)}
         aria-label={TAB_LABELS[id]}
         aria-current={isActive ? "page" : undefined}
-        className="flex-1 flex items-center justify-center h-[76px] cursor-pointer bg-transparent border-0 outline-none focus:outline-none focus-visible:outline-none"
-        style={{ WebkitTapHighlightColor: "transparent" }}
+        className="flex-1 flex items-center justify-center h-[76px] cursor-pointer appearance-none bg-transparent border-0 outline-none focus:outline-none focus-visible:outline-none active:bg-transparent select-none"
+        style={{
+          WebkitTapHighlightColor: "transparent",
+          WebkitAppearance: "none",
+          appearance: "none",
+          WebkitTouchCallout: "none",
+        }}
       >
         <NavIcon tab={id} isActive={isActive} isGlass={isGlass} />
       </button>

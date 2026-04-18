@@ -13,19 +13,15 @@ const CATEGORIES = [
 
 type CategoryId = (typeof CATEGORIES)[number]["id"];
 
-interface Props {
-  firstName: string;
-}
-
-export function FormationClient({ firstName }: Props) {
+export function FormationClient() {
   const [tab, setTab] = useState<NavTab>("formation");
   const [category, setCategory] = useState<CategoryId>("entreprendre");
   const [scannerOpen, setScannerOpen] = useState(false);
 
   return (
-    <div className="relative min-h-dvh flex flex-col bg-white overflow-hidden">
+    <div className="fixed inset-0 flex flex-col bg-white overflow-hidden">
       {/* ── Titre ────────────────────────────────────────────────── */}
-      <header className="px-6 py-8">
+      <header className="px-6 py-8 shrink-0">
         <h1 className="text-slate-900 text-[32px] leading-[1.15]">
           <span className="block font-poppins font-normal">
             Je me forme <span aria-hidden>🎓</span> sur
@@ -48,7 +44,7 @@ export function FormationClient({ firstName }: Props) {
       </header>
 
       {/* ── Badges catégories ────────────────────────────────────── */}
-      <div className="pl-6 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="pl-6 overflow-x-auto shrink-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="flex gap-2 pr-6 w-max">
           {CATEGORIES.map((c) => {
             const isActive = category === c.id;
@@ -101,10 +97,7 @@ export function FormationClient({ firstName }: Props) {
 
       {/* ── Modal scanner QR ─────────────────────────────────────── */}
       {scannerOpen && (
-        <QRScannerModal
-          firstName={firstName}
-          onClose={() => setScannerOpen(false)}
-        />
+        <QRScannerModal onClose={() => setScannerOpen(false)} />
       )}
     </div>
   );
