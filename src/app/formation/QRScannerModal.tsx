@@ -17,9 +17,10 @@ const CORNER_R = 22;           // arrondi du L
 
 interface Props {
   onClose: () => void;
+  onNoQR: () => void;
 }
 
-export function QRScannerModal({ onClose }: Props) {
+export function QRScannerModal({ onClose, onNoQR }: Props) {
   const router = useRouter();
   const videoRef  = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -176,8 +177,8 @@ export function QRScannerModal({ onClose }: Props) {
 
       {/* ── Cadre scanner (coins L + tirets latéraux + scan line) */}
       <div
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-        style={{ width: SCAN_SIZE, height: SCAN_SIZE }}
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none overflow-hidden"
+        style={{ width: SCAN_SIZE, height: SCAN_SIZE, borderRadius: VIEWPORT_RADIUS }}
       >
         <CornerBracket position="tl" />
         <CornerBracket position="tr" />
@@ -202,7 +203,7 @@ export function QRScannerModal({ onClose }: Props) {
         <motion.button
           type="button"
           whileTap={{ scale: 0.98 }}
-          onClick={onClose}
+          onClick={onNoQR}
           className="w-full h-14 rounded-full bg-white font-poppins font-semibold text-[15px] text-slate-900 cursor-pointer appearance-none border-0 outline-none focus:outline-none select-none"
           style={{
             WebkitTapHighlightColor: "transparent",
