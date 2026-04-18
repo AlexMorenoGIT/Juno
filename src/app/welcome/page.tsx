@@ -14,8 +14,8 @@ const CIRCLE_2 = 220;  // cercle moyen
 // Décalage vertical des cercles 1 & 2 (descendus dans la scène)
 const CORE_DY = 42;
 
-// Orbite des 6 éléments — juste en dehors du cercle 2 (r=110)
-const INNER_R = 132;
+// Centres des 6 éléments exactement sur la ligne du cercle 2
+const INNER_R = CIRCLE_2 / 2;
 
 // Cercle 3 : rayon plus grand + centre plus profond → arc moins arrondi
 const OUTER_R = 290;
