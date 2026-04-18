@@ -338,7 +338,7 @@ export default function WelcomePage() {
                     className={`flex-1 rounded-full text-[13px] font-poppins font-medium transition-colors ${
                       mode === "login" ? "bg-deep-900 text-white" : "text-slate-700"
                     }`}
-                    style={{ padding: 6 }}
+                    style={{ paddingTop: 13, paddingBottom: 13 }}
                   >
                     J&apos;ai déjà un compte
                   </button>
@@ -347,7 +347,7 @@ export default function WelcomePage() {
                     className={`flex-1 rounded-full text-[13px] font-poppins font-medium transition-colors ${
                       mode === "signup" ? "bg-deep-900 text-white" : "text-slate-700"
                     }`}
-                    style={{ padding: 6 }}
+                    style={{ paddingTop: 13, paddingBottom: 13 }}
                   >
                     Je m&apos;inscris
                   </button>
@@ -369,10 +369,10 @@ export default function WelcomePage() {
                       </h2>
 
                       <div className="mt-5 space-y-3">
-                        <AuthInput type="email" placeholder="Email" />
+                        <AuthInput label="Email" type="email" />
                         <AuthInput
+                          label="Mot de passe"
                           type={showPwd ? "text" : "password"}
-                          placeholder="Mot de passe"
                           rightIcon={
                             <EyeToggle
                               visible={showPwd}
@@ -406,12 +406,12 @@ export default function WelcomePage() {
                       </h2>
 
                       <div className="mt-5 space-y-3">
-                        <AuthInput type="text" placeholder="Prénom" />
-                        <AuthInput type="text" placeholder="Nom" />
-                        <AuthInput type="email" placeholder="Email" />
+                        <AuthInput label="Prénom" type="text" />
+                        <AuthInput label="Nom" type="text" />
+                        <AuthInput label="Email" type="email" />
                         <AuthInput
+                          label="Mot de passe"
                           type={showPwd ? "text" : "password"}
-                          placeholder="Mot de passe"
                           rightIcon={
                             <EyeToggle
                               visible={showPwd}
@@ -420,8 +420,8 @@ export default function WelcomePage() {
                           }
                         />
                         <AuthInput
+                          label="Confirmer le mot de passe"
                           type={showPwd2 ? "text" : "password"}
-                          placeholder="Confirmer le mot de passe"
                           rightIcon={
                             <EyeToggle
                               visible={showPwd2}
@@ -449,32 +449,41 @@ export default function WelcomePage() {
 /* ── Sous-composants sheet ──────────────────────────────────────────── */
 
 function AuthInput({
+  label,
   type,
-  placeholder,
   rightIcon,
 }: {
+  label: string;
   type: string;
-  placeholder: string;
   rightIcon?: React.ReactNode;
 }) {
   return (
-    <div className="relative">
-      <input
-        type={type}
-        placeholder={placeholder}
-        className="w-full font-poppins text-[14px] text-slate-900 placeholder:text-slate-300 focus:outline-none"
-        style={{
-          height: 40,
-          paddingLeft: 20,
-          paddingRight: rightIcon ? 44 : 20,
-          borderRadius: 8,
-          border: "1px solid var(--color-slate-600)",
-          background: "transparent",
-        }}
-      />
-      {rightIcon && (
-        <div className="absolute right-3 top-1/2 -translate-y-1/2">{rightIcon}</div>
-      )}
+    <div>
+      <label
+        className="block font-poppins font-medium text-slate-700"
+        style={{ fontSize: 10, marginBottom: 4 }}
+      >
+        {label}
+      </label>
+      <div className="relative">
+        <input
+          type={type}
+          className="block w-full font-poppins text-[14px] text-slate-900 focus:outline-none"
+          style={{
+            height: 40,
+            paddingLeft: 20,
+            paddingRight: rightIcon ? 44 : 20,
+            borderRadius: 8,
+            border: "0.5px solid var(--color-slate-600)",
+            background: "transparent",
+          }}
+        />
+        {rightIcon && (
+          <div className="absolute inset-y-0 right-3 flex items-center">
+            {rightIcon}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -485,19 +494,21 @@ function EyeToggle({ visible, onClick }: { visible: boolean; onClick: () => void
       type="button"
       onClick={onClick}
       aria-label={visible ? "Masquer le mot de passe" : "Afficher le mot de passe"}
-      className="relative inline-flex items-center justify-center text-slate-900"
+      className="relative flex items-center justify-center text-slate-900"
       style={{ width: 22, height: 22 }}
     >
       <Icon name="eye" size={20} />
       {!visible && (
         <span
           aria-hidden
-          className="absolute"
+          className="absolute block"
           style={{
-            width: 24,
+            width: 22,
             height: 1.4,
             background: "currentColor",
-            transform: "rotate(-45deg)",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%) rotate(-45deg)",
           }}
         />
       )}
