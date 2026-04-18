@@ -11,12 +11,15 @@ import { illustrations } from "@/lib/illustrations";
 const CIRCLE_1 = 96;   // cercle central (autour du monogramme)
 const CIRCLE_2 = 220;  // cercle moyen
 
-// Orbite des 6 éléments autour du cercle 2
-const INNER_R = 150;
+// Décalage vertical des cercles 1 & 2 (descendus dans la scène)
+const CORE_DY = 42;
+
+// Orbite des 6 éléments — juste en dehors du cercle 2 (r=110)
+const INNER_R = 128;
 
 // Cercle 3 : grand cercle dont seul le haut est visible
 const OUTER_R = 320;
-const OUTER_CY = 220; // centre du cercle 3 = en dessous du centre de la scène
+const OUTER_CY = 170; // centre du cercle 3 → plus haut qu'avant
 
 const rad = (d: number) => (d * Math.PI) / 180;
 
@@ -40,7 +43,7 @@ const onInner = (angleDeg: number, w: number, h: number, fx: number, fy: number,
   w,
   h,
   x: Math.round(INNER_R * Math.sin(rad(angleDeg))),
-  y: Math.round(-INNER_R * Math.cos(rad(angleDeg))),
+  y: Math.round(-INNER_R * Math.cos(rad(angleDeg))) + CORE_DY,
   fx, fy, dur, rot,
 });
 
@@ -115,7 +118,7 @@ export default function WelcomePage() {
             style={{
               width: CIRCLE_2,
               height: CIRCLE_2,
-              top: -CIRCLE_2 / 2,
+              top: -CIRCLE_2 / 2 + CORE_DY,
               left: -CIRCLE_2 / 2,
               border: "1.5px solid rgba(255,255,255,0.95)",
             }}
@@ -127,7 +130,7 @@ export default function WelcomePage() {
             style={{
               width: CIRCLE_1,
               height: CIRCLE_1,
-              top: -CIRCLE_1 / 2,
+              top: -CIRCLE_1 / 2 + CORE_DY,
               left: -CIRCLE_1 / 2,
               background: "rgba(255,255,255,0.60)",
               border: "1.5px solid rgba(255,255,255,1)",
@@ -143,7 +146,7 @@ export default function WelcomePage() {
             style={{
               width: CIRCLE_1,
               height: CIRCLE_1,
-              top: -CIRCLE_1 / 2,
+              top: -CIRCLE_1 / 2 + CORE_DY,
               left: -CIRCLE_1 / 2,
             }}
             initial={{ opacity: 0, scale: 0.4 }}
@@ -211,17 +214,17 @@ export default function WelcomePage() {
       {/* ── Texte + CTA ────────────────────────────────────────────── */}
       <motion.div
         className="relative z-10 px-7"
-        style={{ paddingBottom: "max(1.5rem, env(safe-area-inset-bottom))" }}
+        style={{ paddingBottom: "max(2.75rem, calc(env(safe-area-inset-bottom) + 1.5rem))" }}
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6, duration: 0.55, ease }}
       >
-        <div className="mb-3">
+        <div className="mb-3 flex justify-center">
           <Logo variant="paysage" color="couleur" height={26} />
         </div>
 
         <h1
-          className="font-museo leading-[1.05] mb-6"
+          className="font-museo leading-[1.05] mb-7 text-center"
           style={{
             fontSize: 40,
             fontWeight: 600,
@@ -229,7 +232,18 @@ export default function WelcomePage() {
             letterSpacing: "-0.01em",
           }}
         >
-          Bienvenue sur<br />l&apos;application
+          Bienvenue sur
+          <br />
+          <span
+            style={{
+              background: "linear-gradient(90deg, #FF8C00 0%, #8F21CF 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
+            l&apos;application
+          </span>
         </h1>
 
         <motion.button
