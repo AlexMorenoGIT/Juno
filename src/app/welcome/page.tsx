@@ -15,11 +15,11 @@ const CIRCLE_2 = 220;  // cercle moyen
 const CORE_DY = 42;
 
 // Orbite des 6 éléments — juste en dehors du cercle 2 (r=110)
-const INNER_R = 128;
+const INNER_R = 132;
 
-// Cercle 3 : rayon plus petit + centre moins profond → arc plus arrondi
-const OUTER_R = 210;
-const OUTER_CY = 30;
+// Cercle 3 : rayon plus grand + centre plus profond → arc moins arrondi
+const OUTER_R = 290;
+const OUTER_CY = 115;
 
 const rad = (d: number) => (d * Math.PI) / 180;
 
@@ -60,19 +60,19 @@ const onOuter = (angleDeg: number, w: number, h: number, fx: number, fy: number,
 // 6 éléments placés "random" autour du cercle 2, équidistants
 const INNER_ITEMS: OrbitItem[] = [
   onInner(-42, 66, 66, 4, -6, 5.6, 8,  "shape",  illustrations.torus2),
-  onInner(38,  60, 60, -3, -5, 6.2, 0,  "avatar", "/avatars/avatar-graduate.png"),
-  onInner(98,  52, 52, -4, 3,  5.0, 0,  "avatar", "/avatars/avatar-glasses.png"),
-  onInner(148, 72, 72, 3,  4,  6.8, -6, "shape",  illustrations.cylindreTeal),
+  onInner(38,  58, 58, -3, -5, 6.2, 0,  "avatar", "/avatars/avatar-pink.png"),
+  onInner(98,  83, 83, -4, 3,  5.0, -6, "shape",  illustrations.cylindreTeal),
+  onInner(148, 60, 60, 3,  4,  6.8, 0,  "avatar", "/avatars/avatar-diploma.png"),
   onInner(-148,73, 73, -5, 3,  5.4, 10, "shape",  illustrations.cube),
-  onInner(-98, 56, 56, 4,  -4, 6.0, 0,  "avatar", "/avatars/avatar-dark.png"),
+  onInner(-98, 58, 58, 4,  -4, 6.0, 0,  "avatar", "/avatars/avatar-yellow.png"),
 ];
 
 // 4 éléments sur l'arc du cercle 3 (partie haute uniquement)
 const OUTER_ITEMS: OrbitItem[] = [
-  onOuter(-38, 70, 70, -4, -6, 7.0, 8,  "shape",  illustrations.spiral),
-  onOuter(-13, 54, 54, 3,  -5, 6.4, 0,  "avatar", "/avatars/avatar-red.png"),
-  onOuter(13,  74, 74, -3, -5, 7.6, -10, "shape", illustrations.polyhedron),
-  onOuter(38,  52, 52, 4,  -4, 6.8, 0,  "avatar", "/avatars/avatar-beard.png"),
+  onOuter(-30, 72, 72, -4, -6, 7.0, 8,  "shape",  illustrations.spiral),
+  onOuter(-10, 54, 54, 3,  -5, 6.4, 0,  "avatar", "/avatars/avatar-blond.png"),
+  onOuter(11,  76, 76, -3, -5, 7.6, -10, "shape", illustrations.polyhedron),
+  onOuter(30,  54, 54, 4,  -4, 6.8, 0,  "avatar", "/avatars/avatar-red.png"),
 ];
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -294,8 +294,16 @@ export default function WelcomePage() {
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", stiffness: 320, damping: 34 }}
+              drag="y"
+              dragConstraints={{ top: 0, bottom: 0 }}
+              dragElastic={{ top: 0, bottom: 0.6 }}
+              onDragEnd={(_, info) => {
+                if (info.offset.y > 120 || info.velocity.y > 500) {
+                  setSheetOpen(false);
+                }
+              }}
             >
-              <div className="flex justify-center pt-3 pb-2">
+              <div className="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing">
                 <div className="w-10 h-1.5 rounded-full bg-slate-200" />
               </div>
               {/* Contenu de la sheet — à remplir ensuite */}
