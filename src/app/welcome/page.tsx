@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useDragControls } from "framer-motion";
 import Image from "next/image";
 import { Logo } from "@/components/brand/Logo";
 import { Icon } from "@/components/ui/Icon";
 import { illustrations } from "@/lib/illustrations";
+import { createClient } from "@/utils/supabase/client";
 
 type AuthMode = "login" | "signup";
 
@@ -83,11 +85,106 @@ const ease = [0.22, 1, 0.36, 1] as const;
 /* ── Page ────────────────────────────────────────────────────────────── */
 
 export default function WelcomePage() {
+  const router = useRouter();
   const [sheetOpen, setSheetOpen] = useState(false);
   const [mode, setMode] = useState<AuthMode>("login");
   const [showPwd, setShowPwd] = useState(false);
   const [showPwd2, setShowPwd2] = useState(false);
   const dragControls = useDragControls();
+
+  const [login, setLogin] = useState({ email: "", password: "" });
+  const [signup, setSignup] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setInfo(null);
+
+    const supabase = createClient();
+    const { error: err } = await supabase.auth.signInWithPassword({
+      email: login.email.trim(),
+      password: login.password,
+    });
+
+    if (err) {
+      setError(err.message === "Invalid login credentials"
+        ? "Email ou mot de passe incorrect."
+        : err.message);
+      setLoading(false);
+      return;
+    }
+
+    router.replace("/home");
+    router.refresh();
+  }
+
+  async function handleSignup(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setInfo(null);
+
+    if (!signup.firstName.trim() || !signup.lastName.trim()) {
+      setError("Renseigne ton prénom et ton nom.");
+      setLoading(false);
+      return;
+    }
+    if (signup.password.length < 6) {
+      setError("Le mot de passe doit faire au moins 6 caractères.");
+      setLoading(false);
+      return;
+    }
+    if (signup.password !== signup.confirmPassword) {
+      setError("Les mots de passe ne correspondent pas.");
+      setLoading(false);
+      return;
+    }
+
+    const supabase = createClient();
+    const { data, error: err } = await supabase.auth.signUp({
+      email: signup.email.trim(),
+      password: signup.password,
+      options: {
+        data: {
+          first_name: signup.firstName.trim(),
+          last_name: signup.lastName.trim(),
+        },
+      },
+    });
+
+    if (err) {
+      setError(err.message);
+      setLoading(false);
+      return;
+    }
+
+    if (!data.session) {
+      setError(
+        "La confirmation email est activée côté Supabase. Désactive-la : Auth → Providers → Email → « Confirm email » OFF."
+      );
+      setLoading(false);
+      return;
+    }
+
+    router.replace("/home");
+    router.refresh();
+  }
+
+  function switchMode(next: AuthMode) {
+    setMode(next);
+    setError(null);
+    setInfo(null);
+  }
 
   return (
     <div
@@ -334,7 +431,8 @@ export default function WelcomePage() {
                   }}
                 >
                   <button
-                    onClick={() => setMode("login")}
+                    type="button"
+                    onClick={() => switchMode("login")}
                     className={`flex-1 rounded-full text-[13px] font-poppins font-medium transition-colors ${
                       mode === "login" ? "bg-deep-900 text-white" : "text-slate-700"
                     }`}
@@ -343,7 +441,8 @@ export default function WelcomePage() {
                     J&apos;ai déjà un compte
                   </button>
                   <button
-                    onClick={() => setMode("signup")}
+                    type="button"
+                    onClick={() => switchMode("signup")}
                     className={`flex-1 rounded-full text-[13px] font-poppins font-medium transition-colors ${
                       mode === "signup" ? "bg-deep-900 text-white" : "text-slate-700"
                     }`}
@@ -356,8 +455,9 @@ export default function WelcomePage() {
                 {/* Form */}
                 <AnimatePresence mode="wait">
                   {mode === "login" ? (
-                    <motion.div
+                    <motion.form
                       key="login"
+                      onSubmit={handleLogin}
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -8 }}
@@ -369,10 +469,21 @@ export default function WelcomePage() {
                       </h2>
 
                       <div className="mt-5 space-y-3">
-                        <AuthInput label="Email" type="email" />
+                        <AuthInput
+                          label="Email"
+                          type="email"
+                          autoComplete="email"
+                          required
+                          value={login.email}
+                          onChange={(v) => setLogin({ ...login, email: v })}
+                        />
                         <AuthInput
                           label="Mot de passe"
                           type={showPwd ? "text" : "password"}
+                          autoComplete="current-password"
+                          required
+                          value={login.password}
+                          onChange={(v) => setLogin({ ...login, password: v })}
                           rightIcon={
                             <EyeToggle
                               visible={showPwd}
@@ -388,13 +499,21 @@ export default function WelcomePage() {
                         </span>
                       </div>
 
-                      <PrimaryBtn label="Connexion" className="mt-5" />
+                      <FormFeedback error={error} info={info} />
+
+                      <PrimaryBtn
+                        label={loading ? "Connexion…" : "Connexion"}
+                        type="submit"
+                        disabled={loading}
+                        className="mt-5"
+                      />
 
                       <SocialRow />
-                    </motion.div>
+                    </motion.form>
                   ) : (
-                    <motion.div
+                    <motion.form
                       key="signup"
+                      onSubmit={handleSignup}
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -8 }}
@@ -406,12 +525,37 @@ export default function WelcomePage() {
                       </h2>
 
                       <div className="mt-5 space-y-3">
-                        <AuthInput label="Prénom" type="text" />
-                        <AuthInput label="Nom" type="text" />
-                        <AuthInput label="Email" type="email" />
+                        <AuthInput
+                          label="Prénom"
+                          type="text"
+                          autoComplete="given-name"
+                          required
+                          value={signup.firstName}
+                          onChange={(v) => setSignup({ ...signup, firstName: v })}
+                        />
+                        <AuthInput
+                          label="Nom"
+                          type="text"
+                          autoComplete="family-name"
+                          required
+                          value={signup.lastName}
+                          onChange={(v) => setSignup({ ...signup, lastName: v })}
+                        />
+                        <AuthInput
+                          label="Email"
+                          type="email"
+                          autoComplete="email"
+                          required
+                          value={signup.email}
+                          onChange={(v) => setSignup({ ...signup, email: v })}
+                        />
                         <AuthInput
                           label="Mot de passe"
                           type={showPwd ? "text" : "password"}
+                          autoComplete="new-password"
+                          required
+                          value={signup.password}
+                          onChange={(v) => setSignup({ ...signup, password: v })}
                           rightIcon={
                             <EyeToggle
                               visible={showPwd}
@@ -422,6 +566,10 @@ export default function WelcomePage() {
                         <AuthInput
                           label="Confirmer le mot de passe"
                           type={showPwd2 ? "text" : "password"}
+                          autoComplete="new-password"
+                          required
+                          value={signup.confirmPassword}
+                          onChange={(v) => setSignup({ ...signup, confirmPassword: v })}
                           rightIcon={
                             <EyeToggle
                               visible={showPwd2}
@@ -431,10 +579,17 @@ export default function WelcomePage() {
                         />
                       </div>
 
-                      <PrimaryBtn label="Créer mon compte" className="mt-5" />
+                      <FormFeedback error={error} info={info} />
+
+                      <PrimaryBtn
+                        label={loading ? "Création…" : "Créer mon compte"}
+                        type="submit"
+                        disabled={loading}
+                        className="mt-5"
+                      />
 
                       <SocialRow />
-                    </motion.div>
+                    </motion.form>
                   )}
                 </AnimatePresence>
               </div>
@@ -451,10 +606,18 @@ export default function WelcomePage() {
 function AuthInput({
   label,
   type,
+  value,
+  onChange,
+  autoComplete,
+  required,
   rightIcon,
 }: {
   label: string;
   type: string;
+  value: string;
+  onChange: (v: string) => void;
+  autoComplete?: string;
+  required?: boolean;
   rightIcon?: React.ReactNode;
 }) {
   return (
@@ -468,6 +631,10 @@ function AuthInput({
       <div className="relative">
         <input
           type={type}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          autoComplete={autoComplete}
+          required={required}
           className="block w-full font-poppins text-[14px] text-slate-900 focus:outline-none"
           style={{
             height: 40,
@@ -484,6 +651,25 @@ function AuthInput({
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function FormFeedback({ error, info }: { error: string | null; info: string | null }) {
+  if (!error && !info) return null;
+  return (
+    <div
+      className={`mt-4 font-poppins text-[12px] rounded-lg px-3 py-2 ${
+        error ? "bg-error-50 text-error-700" : "bg-mint-50 text-mint-900"
+      }`}
+      style={{
+        border: error
+          ? "0.5px solid var(--color-error-200)"
+          : "0.5px solid var(--color-mint-200)",
+      }}
+      role={error ? "alert" : "status"}
+    >
+      {error ?? info}
     </div>
   );
 }
@@ -516,16 +702,28 @@ function EyeToggle({ visible, onClick }: { visible: boolean; onClick: () => void
   );
 }
 
-function PrimaryBtn({ label, className = "" }: { label: string; className?: string }) {
+function PrimaryBtn({
+  label,
+  className = "",
+  type = "button",
+  disabled,
+}: {
+  label: string;
+  className?: string;
+  type?: "button" | "submit";
+  disabled?: boolean;
+}) {
   return (
     <motion.button
-      className={`w-full h-12 font-poppins font-semibold text-white text-[15px] ${className}`}
+      type={type}
+      disabled={disabled}
+      className={`w-full h-12 font-poppins font-semibold text-white text-[15px] disabled:opacity-60 ${className}`}
       style={{
         background: "var(--color-june-600)",
         borderRadius: 8,
         boxShadow: "0 6px 20px rgba(255,140,0,0.28)",
       }}
-      whileTap={{ scale: 0.98 }}
+      whileTap={disabled ? undefined : { scale: 0.98 }}
     >
       {label}
     </motion.button>
