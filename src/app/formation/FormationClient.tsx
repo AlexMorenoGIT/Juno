@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { BottomNav, type NavTab } from "@/components/ui/BottomNav";
 import { QRScannerModal } from "./QRScannerModal";
@@ -19,6 +19,17 @@ export function FormationClient() {
   const [category, setCategory] = useState<CategoryId>("entreprendre");
   const [scannerOpen, setScannerOpen] = useState(false);
   const [noQROpen, setNoQROpen] = useState(false);
+
+  useEffect(() => {
+    const prevHtml = document.documentElement.style.overflow;
+    const prevBody = document.body.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.documentElement.style.overflow = prevHtml;
+      document.body.style.overflow = prevBody;
+    };
+  }, []);
 
   return (
     <div

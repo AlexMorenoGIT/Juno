@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState, useEffect } from "react";
+import { useId } from "react";
 import { motion } from "framer-motion";
 
 export type NavTab = "formation" | "communaute" | "boutique" | "profil";
@@ -22,7 +22,6 @@ const TAB_LABELS: Record<NavTab, string> = {
 };
 
 const SPRING = { type: "spring" as const, stiffness: 380, damping: 32, mass: 0.8 };
-const NAV_PX = 20; // padding horizontal (px-5) sur les bords de la pill
 
 export function BottomNav({
   activeTab,
@@ -30,22 +29,7 @@ export function BottomNav({
   variant = "dark",
   className = "",
 }: BottomNavProps) {
-  const activeIndex = TAB_IDS.indexOf(activeTab);
   const isGlass = variant === "glass";
-
-  // Mesure la largeur réelle du nav pour centrer la lumière sur le bon bouton
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const [navWidth, setNavWidth] = useState(378);
-  useEffect(() => {
-    const el = wrapperRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(([e]) => setNavWidth(e.contentRect.width));
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-
-  const btnW = (navWidth - 2 * NAV_PX) / TAB_IDS.length;
-  const lumiereLeft = `${NAV_PX + btnW * activeIndex + btnW / 2}px`;
 
   const navButtons = TAB_IDS.map((id) => {
     const isActive = activeTab === id;
@@ -56,7 +40,7 @@ export function BottomNav({
         onClick={() => onTabChange(id)}
         aria-label={TAB_LABELS[id]}
         aria-current={isActive ? "page" : undefined}
-        className="flex-1 flex items-center justify-center h-[76px] cursor-pointer appearance-none bg-transparent border-0 outline-none focus:outline-none focus-visible:outline-none active:bg-transparent select-none"
+        className="relative flex-1 flex items-center justify-center h-[76px] cursor-pointer appearance-none bg-transparent border-0 outline-none focus:outline-none focus-visible:outline-none active:bg-transparent select-none"
         style={{
           WebkitTapHighlightColor: "transparent",
           WebkitAppearance: "none",
@@ -64,38 +48,40 @@ export function BottomNav({
           WebkitTouchCallout: "none",
         }}
       >
+        {isActive && (
+          <motion.span
+            layoutId="bottom-nav-lumiere"
+            className="pointer-events-none absolute left-1/2 -translate-x-1/2 z-50"
+            style={{ top: -3 }}
+            transition={SPRING}
+            aria-hidden
+          >
+            <Lumiere />
+          </motion.span>
+        )}
         <NavIcon tab={id} isActive={isActive} isGlass={isGlass} />
       </button>
     );
   });
 
   return (
-    <div ref={wrapperRef} className={`relative ${className}`}>
-      {/* ── Lumière animée (glisse en spring au-dessus du nav) ── */}
-      <motion.span
-        className="pointer-events-none absolute z-50"
-        style={{ top: -3, translateX: "-50%" }}
-        animate={{ left: lumiereLeft }}
-        transition={SPRING}
-        aria-hidden
-      >
-        <Lumiere />
-      </motion.span>
-
+    <div className={`relative ${className}`} style={{ isolation: "isolate" }}>
       {isGlass ? (
         /* ── Variante Glass : Apple-style liquid glass ── */
         <div
           className="relative overflow-hidden rounded-full"
           style={{
-            backdropFilter: "blur(10px) saturate(150%) brightness(105%)",
-            WebkitBackdropFilter: "blur(10px) saturate(150%) brightness(105%)",
-            backgroundColor: "rgba(255, 255, 255, 0.07)",
-            border: "1px solid rgba(255, 255, 255, 0.22)",
+            backdropFilter: "blur(14px) saturate(160%) brightness(108%)",
+            WebkitBackdropFilter: "blur(14px) saturate(160%) brightness(108%)",
+            backgroundColor: "rgba(255, 255, 255, 0.14)",
+            border: "1px solid rgba(255, 255, 255, 0.28)",
             boxShadow: [
               "0 8px 32px rgba(0,0,0,0.18)",
               "inset 0 1.5px 0 rgba(255,255,255,0.45)",
               "inset 0 -1px 0 rgba(255,255,255,0.05)",
             ].join(", "),
+            transform: "translateZ(0)",
+            willChange: "backdrop-filter",
           }}
         >
           {/* Spéculaire supérieur — simule la réfraction glass */}
@@ -217,14 +203,16 @@ function NavIcon({ tab, isActive, isGlass }: NavIconProps) {
   }[tab];
 
   return (
-    <motion.span
-      initial={{ opacity: targetOpacity, filter: targetFilter }}
-      animate={{ opacity: targetOpacity, filter: targetFilter }}
-      transition={{ duration: 0.22, ease: "easeOut" }}
-      style={{ display: "flex", opacity: targetOpacity, filter: targetFilter }}
+    <span
+      style={{
+        display: "flex",
+        opacity: targetOpacity,
+        filter: targetFilter,
+        transition: "opacity 0.22s ease-out, filter 0.22s ease-out",
+      }}
     >
       <IconComp color={color} active={isActive} />
-    </motion.span>
+    </span>
   );
 }
 

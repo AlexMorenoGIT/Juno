@@ -9,18 +9,28 @@ interface Props {
 
 export function NoQRCodeSheet({ onClose }: Props) {
   return (
+    <>
+      {/* ── Backdrop dim ──────────────────────────────────────── */}
+      <motion.div
+        className="fixed inset-0 z-[59] bg-black/40"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        onClick={onClose}
+      />
     <motion.div
       role="dialog"
       aria-modal="true"
       aria-label="Tu n'as pas de QR code"
-      className="fixed inset-x-0 top-0 z-[60] bg-white flex flex-col overflow-hidden"
+      className="fixed inset-x-0 bottom-0 z-[60] bg-white flex flex-col overflow-hidden rounded-t-[32px]"
       initial={{ y: "100%" }}
       animate={{ y: 0 }}
       exit={{ y: "100%" }}
       transition={{ type: "spring", damping: 32, stiffness: 320 }}
       style={{
-        height: "100dvh",
-        paddingTop: "env(safe-area-inset-top)",
+        paddingBottom: "env(safe-area-inset-bottom)",
+        maxHeight: "90dvh",
       }}
     >
       {/* ── Close ─────────────────────────────────────────────── */}
@@ -28,9 +38,8 @@ export function NoQRCodeSheet({ onClose }: Props) {
         type="button"
         onClick={onClose}
         aria-label="Fermer"
-        className="absolute right-5 z-20 cursor-pointer appearance-none bg-transparent border-0 outline-none focus:outline-none select-none"
+        className="absolute right-5 top-5 z-20 cursor-pointer appearance-none bg-transparent border-0 outline-none focus:outline-none select-none"
         style={{
-          top: "calc(env(safe-area-inset-top) + 16px)",
           WebkitTapHighlightColor: "transparent",
           WebkitAppearance: "none",
         }}
@@ -108,5 +117,6 @@ export function NoQRCodeSheet({ onClose }: Props) {
         </motion.button>
       </div>
     </motion.div>
+    </>
   );
 }
