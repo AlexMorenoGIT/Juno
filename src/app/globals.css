@@ -114,9 +114,7 @@
 }
 
 :root {
-  /* Body bg = sombre : toute bande résiduelle PWA iOS se confond
-     avec le home indicator. Chaque écran pose son propre bg par-dessus. */
-  --background: #1a1a1a;
+  --background: #ffffff;
   --foreground: #1a1a1a;
 }
 
@@ -163,7 +161,7 @@ body {
   left: 0;
   right: 0;
   /* Dépasse sous le home indicator pour couvrir tout l'écran en PWA iOS */
-  height: calc(100dvh + env(safe-area-inset-bottom));
+  bottom: calc(env(safe-area-inset-bottom) * -1);
   z-index: 9999;
   display: flex;
   align-items: center;
