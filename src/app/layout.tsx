@@ -106,7 +106,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }
         `}</Script>
       </head>
-      <body className="font-poppins bg-white">
+      <body className="font-poppins antialiased">
         <SplashScreen />
         {children}
       </body>
