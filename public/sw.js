@@ -1,4 +1,4 @@
-const CACHE = 'juno-v4';
+const CACHE = 'juno-v5';
 
 self.addEventListener('install', (e) => {
   e.waitUntil(

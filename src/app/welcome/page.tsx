@@ -195,8 +195,9 @@ export default function WelcomePage() {
 
   return (
     <div
-      className="fixed inset-0 overflow-hidden flex flex-col select-none"
+      className="fixed inset-x-0 top-0 overflow-hidden flex flex-col select-none"
       style={{
+        height: "calc(100dvh + env(safe-area-inset-bottom))",
         background: [
           // Halo violet haut-gauche — plus gros & plus diffus
           "radial-gradient(ellipse 180% 95% at 5% -15%, rgba(183,140,246,0.78) 0%, rgba(183,140,246,0.28) 38%, transparent 70%)",

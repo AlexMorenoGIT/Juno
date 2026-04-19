@@ -33,8 +33,9 @@ export function FormationClient() {
 
   return (
     <div
-      className="fixed inset-0 flex flex-col bg-white overflow-hidden"
+      className="fixed inset-x-0 top-0 flex flex-col bg-white overflow-hidden"
       style={{
+        height: "calc(100dvh + env(safe-area-inset-bottom))",
         paddingTop: "env(safe-area-inset-top)",
       }}
     >
