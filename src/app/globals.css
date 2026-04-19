@@ -127,13 +127,15 @@ body {
    PWA — Safe areas & standalone mode
    ============================================================ */
 
-body {
-  min-height: 100dvh;
-  padding-top:    env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
-  padding-left:   env(safe-area-inset-left);
-  padding-right:  env(safe-area-inset-right);
+html, body {
+  height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
 }
+
+/* Safe-area : géré par chaque écran via env(safe-area-inset-*).
+   Le body occupe la totalité du viewport (home indicator inclus). */
 
 @media (display-mode: standalone) {
   [data-pwa-hide] { display: none !important; }
