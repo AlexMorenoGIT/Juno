@@ -200,7 +200,7 @@ export default function WelcomePage() {
         top: 0,
         left: 0,
         right: 0,
-        bottom: "calc(env(safe-area-inset-bottom) * -1)",
+        bottom: -60,
         background: [
           // Halo violet haut-gauche — plus gros & plus diffus
           "radial-gradient(ellipse 180% 95% at 5% -15%, rgba(183,140,246,0.78) 0%, rgba(183,140,246,0.28) 38%, transparent 70%)",

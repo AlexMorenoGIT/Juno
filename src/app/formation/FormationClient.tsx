@@ -38,7 +38,7 @@ export function FormationClient() {
         top: 0,
         left: 0,
         right: 0,
-        bottom: "calc(env(safe-area-inset-bottom) * -1)",
+        bottom: -60,
         paddingTop: "env(safe-area-inset-top)",
       }}
     >
