@@ -195,7 +195,7 @@ export default function WelcomePage() {
 
   return (
     <div
-      className="relative h-[100dvh] overflow-hidden flex flex-col select-none"
+      className="fixed inset-0 overflow-hidden flex flex-col select-none"
       style={{
         background: [
           // Halo violet haut-gauche — plus gros & plus diffus
