@@ -39,31 +39,22 @@ const TAGS: Tag[] = [
 ];
 
 /* ──────────────────────────────────────────────────────────────
-   Titre multicolore "communauté"
+   Titre dégradé "communauté" — même dégradé que /welcome
+   (orange → violet, #FF8C00 → #8F21CF, text-clip)
    ────────────────────────────────────────────────────────────── */
 
-const TITLE_COLORS = [
-  "#ff2343", // c — error-500
-  "#ff8c00", // o — june-600
-  "#25e2ad", // m — mint-500
-  "#ff576f", // m — error-400
-  "#057499", // u — core-700
-  "#ffbb32", // n — june-400
-  "#008367", // a — mint-700
-  "#00b9e2", // u — core-500
-  "#8f21cf", // t — deep-700
-  "#5b5b5b", // é — slate-600
-];
-
 function ColoredCommunaute() {
-  const letters = ["c", "o", "m", "m", "u", "n", "a", "u", "t", "é"];
   return (
-    <span className="font-museo font-semibold text-[40px] leading-none">
-      {letters.map((l, i) => (
-        <span key={i} style={{ color: TITLE_COLORS[i] }}>
-          {l}
-        </span>
-      ))}
+    <span
+      className="font-museo font-semibold text-[40px] leading-none"
+      style={{
+        background: "linear-gradient(90deg, #FF8C00 0%, #8F21CF 100%)",
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        backgroundClip: "text",
+      }}
+    >
+      communauté
     </span>
   );
 }
@@ -168,10 +159,18 @@ function StepOne({ onNext }: { onNext: () => void }) {
 
       {/* Titre + CTA */}
       <div className="flex-1 flex flex-col items-center justify-end pb-10 px-6">
-        <h1 className="text-center font-museo font-semibold text-[32px] leading-tight text-slate-900">
+        <h1
+          className="font-museo leading-[1.05] text-center"
+          style={{
+            fontSize: 40,
+            fontWeight: 600,
+            color: "#1a1a1a",
+            letterSpacing: "-0.01em",
+          }}
+        >
           découvre la
         </h1>
-        <div className="mt-3">
+        <div className="mt-2">
           <ColoredCommunaute />
         </div>
 
@@ -180,8 +179,11 @@ function StepOne({ onNext }: { onNext: () => void }) {
         <button
           type="button"
           onClick={onNext}
-          className="mt-6 w-full h-[56px] rounded-full font-poppins font-semibold text-white text-[16px] active:scale-[0.98] transition-transform"
-          style={{ background: "var(--color-june-600)" }}
+          className="mt-6 w-full h-14 rounded-full font-poppins font-semibold text-white text-base tracking-wide active:scale-[0.98] transition-transform"
+          style={{
+            background: "linear-gradient(135deg, #FF8C00 0%, #e07800 100%)",
+            boxShadow: "0 8px 28px rgba(255,140,0,0.38)",
+          }}
         >
           Suivant
         </button>
