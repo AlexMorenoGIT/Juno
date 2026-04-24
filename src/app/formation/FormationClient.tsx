@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { BottomNav, type NavTab } from "@/components/ui/BottomNav";
 import { QRScannerModal } from "./QRScannerModal";
 import { NoQRCodeSheet } from "./NoQRCodeSheet";
@@ -14,7 +15,15 @@ const CATEGORIES = [
 
 type CategoryId = (typeof CATEGORIES)[number]["id"];
 
+const TAB_ROUTE: Record<NavTab, string> = {
+  formation: "/formation",
+  communaute: "/communaute",
+  boutique: "/boutique",
+  profil: "/profil",
+};
+
 export function FormationClient() {
+  const router = useRouter();
   const [tab, setTab] = useState<NavTab>("formation");
   const [category, setCategory] = useState<CategoryId>("entreprendre");
   const [scannerOpen, setScannerOpen] = useState(false);
@@ -112,7 +121,10 @@ export function FormationClient() {
       >
         <BottomNav
           activeTab={tab}
-          onTabChange={setTab}
+          onTabChange={(t) => {
+            setTab(t);
+            if (t !== "formation") router.push(TAB_ROUTE[t]);
+          }}
           variant="glass"
         />
       </div>
