@@ -7,6 +7,10 @@ import { CommunauteOnboarding } from "./CommunauteOnboarding";
 
 const SEEN_KEY = "juno.communaute.seenOnboarding";
 
+// Comptes dev : l'onboarding se rejoue à chaque visite, peu importe
+// la valeur de localStorage.
+const ALWAYS_ONBOARD_EMAILS = new Set(["alex.moreno32390@gmail.co"]);
+
 const TAB_ROUTE: Record<NavTab, string> = {
   formation: "/formation",
   communaute: "/communaute",
@@ -14,23 +18,31 @@ const TAB_ROUTE: Record<NavTab, string> = {
   profil: "/profil",
 };
 
-export function CommunauteClient() {
+export function CommunauteClient({ userEmail }: { userEmail: string | null }) {
   const router = useRouter();
   const [ready, setReady] = useState(false);
   const [seen, setSeen] = useState(false);
   const [tab, setTab] = useState<NavTab>("communaute");
 
+  const forceOnboard = userEmail !== null && ALWAYS_ONBOARD_EMAILS.has(userEmail);
+
   useEffect(() => {
     document.documentElement.style.overflow = "";
     document.body.style.overflow = "";
-    const stored = typeof window !== "undefined" && window.localStorage.getItem(SEEN_KEY) === "1";
-    setSeen(stored);
+    if (forceOnboard) {
+      setSeen(false);
+    } else {
+      const stored =
+        typeof window !== "undefined" &&
+        window.localStorage.getItem(SEEN_KEY) === "1";
+      setSeen(stored);
+    }
     setReady(true);
-  }, []);
+  }, [forceOnboard]);
 
   const handleOnboardingDone = () => {
     try {
-      window.localStorage.setItem(SEEN_KEY, "1");
+      if (!forceOnboard) window.localStorage.setItem(SEEN_KEY, "1");
     } catch {}
     setSeen(true);
   };

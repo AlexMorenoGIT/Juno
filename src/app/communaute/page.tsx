@@ -7,5 +7,5 @@ export default async function CommunautePage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/welcome");
 
-  return <CommunauteClient />;
+  return <CommunauteClient userEmail={user.email ?? null} />;
 }
