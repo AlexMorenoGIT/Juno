@@ -1,10 +1,19 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Icon } from "@/components/ui/Icon";
+import { BottomNav, type NavTab } from "@/components/ui/BottomNav";
+
+const TAB_ROUTE: Record<NavTab, string> = {
+  formation: "/formation",
+  communaute: "/communaute",
+  boutique: "/boutique",
+  profil: "/profil",
+};
 
 type ModuleId = "start" | "entrepreneurship" | "build" | "iteration" | "project";
 
@@ -111,6 +120,9 @@ const MODULES: ModuleCard[] = [
 ];
 
 export function ModulesClient() {
+  const router = useRouter();
+  const [tab, setTab] = useState<NavTab>("formation");
+
   // La page /formation précédente bloque le scroll (overflow:hidden sur
   // html/body). On rétablit le scroll pour cette page (sa cleanup n'est
   // pas toujours rejouée au moment de la navigation côté client).
@@ -121,10 +133,10 @@ export function ModulesClient() {
 
   return (
     <div
-      className="min-h-[100dvh] bg-white"
+      className="relative min-h-[100dvh] bg-white"
       style={{
         paddingTop: "env(safe-area-inset-top)",
-        paddingBottom: "calc(env(safe-area-inset-bottom) + 32px)",
+        paddingBottom: "calc(env(safe-area-inset-bottom) + 140px)",
       }}
     >
       {/* ── Back button ───────────────────────────────────────── */}
@@ -167,6 +179,21 @@ export function ModulesClient() {
           <ModuleCardItem key={module.id} module={module} index={index} />
         ))}
       </main>
+
+      {/* ── BottomNav ──────────────────────────────────────────── */}
+      <div
+        className="fixed inset-x-4 z-40"
+        style={{ bottom: "calc(env(safe-area-inset-bottom) + 16px)" }}
+      >
+        <BottomNav
+          activeTab={tab}
+          onTabChange={(t) => {
+            setTab(t);
+            if (t !== "formation") router.push(TAB_ROUTE[t]);
+          }}
+          variant="dark"
+        />
+      </div>
     </div>
   );
 }
