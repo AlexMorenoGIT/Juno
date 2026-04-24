@@ -7,6 +7,8 @@ import { Icon } from "@/components/ui/Icon";
 
 type ModuleId = "start" | "entrepreneurship" | "build" | "iteration" | "project";
 
+type Cell = [number, number]; // [col, row] in the 22px grid
+
 type ModuleCard = {
   id: ModuleId;
   title: string;
@@ -19,10 +21,11 @@ type ModuleCard = {
     grid: string;        // grid line color (rgba)
     title: string;       // title text color
     body: string;        // body text color
-    badge: string;       // progress badge text/icon color
-    chip: string;        // progress chip background
+    accent: string;      // progress ring color (deep-950, june-950…)
+    brick: string;       // colored "brick" cells color
     glow: string;        // inner highlight overlay
   };
+  bricks: Cell[];        // cells to fill as colored bricks
 };
 
 const MODULES: ModuleCard[] = [
@@ -35,13 +38,14 @@ const MODULES: ModuleCard[] = [
     progress: 0,
     theme: {
       bg: "linear-gradient(135deg,#e0b3ff 0%,#cc83fd 45%,#b854f8 100%)",
-      grid: "rgba(255,255,255,0.22)",
+      grid: "rgba(255,255,255,0.14)",
       title: "#1a1a1a",
       body: "#1a1a1a",
-      badge: "#1a1a1a",
-      chip: "rgba(255,255,255,0.28)",
+      accent: "#440665",  // deep-950
+      brick: "rgba(68,6,101,0.22)",
       glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%)",
     },
+    bricks: [[1, 0], [5, 2], [9, 4]],
   },
   {
     id: "entrepreneurship",
@@ -52,13 +56,14 @@ const MODULES: ModuleCard[] = [
     progress: 0,
     theme: {
       bg: "linear-gradient(135deg,#fff6d3 0%,#ffd86d 40%,#ffa40a 100%)",
-      grid: "rgba(255,255,255,0.32)",
+      grid: "rgba(130,66,12,0.18)",
       title: "#1a1a1a",
       body: "#1a1a1a",
-      badge: "#1a1a1a",
-      chip: "rgba(255,255,255,0.45)",
+      accent: "#462004",  // june-950
+      brick: "rgba(70,32,4,0.18)",
       glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 60%)",
     },
+    bricks: [[3, 1], [7, 0], [0, 3]],
   },
   {
     id: "build",
@@ -69,13 +74,14 @@ const MODULES: ModuleCard[] = [
     progress: 0,
     theme: {
       bg: "linear-gradient(135deg,#ffdde2 0%,#ff94a3 45%,#ff576f 100%)",
-      grid: "rgba(255,255,255,0.28)",
+      grid: "rgba(146,10,30,0.16)",
       title: "#1a1a1a",
       body: "#1a1a1a",
-      badge: "#1a1a1a",
-      chip: "rgba(255,255,255,0.4)",
+      accent: "#50000c",  // error-950
+      brick: "rgba(80,0,12,0.20)",
       glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 60%)",
     },
+    bricks: [[2, 0], [6, 3], [4, 1]],
   },
   {
     id: "iteration",
@@ -87,13 +93,14 @@ const MODULES: ModuleCard[] = [
     locked: true,
     theme: {
       bg: "linear-gradient(135deg,#d3d3d3 0%,#a3a3a3 45%,#5b5b5b 100%)",
-      grid: "rgba(255,255,255,0.18)",
+      grid: "rgba(255,255,255,0.12)",
       title: "rgba(26,26,26,0.72)",
       body: "rgba(26,26,26,0.62)",
-      badge: "rgba(26,26,26,0.72)",
-      chip: "rgba(255,255,255,0.22)",
+      accent: "#272727",  // slate-800
+      brick: "rgba(39,39,39,0.20)",
       glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 60%)",
     },
+    bricks: [[1, 2], [5, 0], [8, 3]],
   },
   {
     id: "project",
@@ -105,13 +112,14 @@ const MODULES: ModuleCard[] = [
     locked: true,
     theme: {
       bg: "linear-gradient(135deg,#d3d3d3 0%,#a3a3a3 45%,#5b5b5b 100%)",
-      grid: "rgba(255,255,255,0.18)",
+      grid: "rgba(255,255,255,0.12)",
       title: "rgba(26,26,26,0.72)",
       body: "rgba(26,26,26,0.62)",
-      badge: "rgba(26,26,26,0.72)",
-      chip: "rgba(255,255,255,0.22)",
+      accent: "#272727",  // slate-800
+      brick: "rgba(39,39,39,0.20)",
       glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 60%)",
     },
+    bricks: [[3, 1], [7, 3], [2, 0]],
   },
 ];
 
@@ -175,13 +183,13 @@ function ModuleCardItem({
   module: ModuleCard;
   index: number;
 }) {
-  const cardClass = `relative block rounded-[28px] min-h-[172px] ${
+  const cardClass = `relative block rounded-[28px] h-[224px] ${
     m.locked ? "cursor-not-allowed" : "active:scale-[0.985]"
   } transition-transform`;
 
   const inner = (
     <>
-        {/* Corps clippé : gradient + grille + reflet (porte aussi l'ombre) */}
+        {/* Corps clippé : gradient + grille + briques + reflet */}
         <div
           aria-hidden
           className="absolute inset-0 overflow-hidden rounded-[28px]"
@@ -192,7 +200,21 @@ function ModuleCardItem({
               : "0 14px 34px -14px rgba(20,10,40,0.35), inset 0 1px 0 rgba(255,255,255,0.45)",
           }}
         >
-          {/* Grille "briques" en fond */}
+          {/* Briques colorées (quelques carrés remplis) */}
+          {m.bricks.map(([col, row], i) => (
+            <span
+              key={i}
+              className="absolute"
+              style={{
+                left: col * 22,
+                top: row * 22,
+                width: 22,
+                height: 22,
+                background: m.theme.brick,
+              }}
+            />
+          ))}
+          {/* Grille "briques" en fond (lignes) */}
           <div
             className="absolute inset-0"
             style={{
@@ -202,9 +224,9 @@ function ModuleCardItem({
               `,
               backgroundSize: "22px 22px",
               maskImage:
-                "linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.3) 100%)",
+                "linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 70%, rgba(0,0,0,0.25) 100%)",
               WebkitMaskImage:
-                "linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.3) 100%)",
+                "linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 70%, rgba(0,0,0,0.25) 100%)",
             }}
           />
           {/* Reflet haut-gauche */}
@@ -214,18 +236,18 @@ function ModuleCardItem({
           />
         </div>
 
-        {/* Illustration (déborde hors du clip) */}
+        {/* Illustration (collée au bord droit, déborde hors du clip) */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-3 top-1/2 -translate-y-1/2 z-10"
-          style={{ width: 158, height: 158 }}
+          className="pointer-events-none absolute right-[-10px] top-1/2 -translate-y-1/2 z-10"
+          style={{ width: 170, height: 170 }}
         >
           <Image
             src={m.illustration}
             alt=""
             fill
-            sizes="158px"
-            className={`object-contain object-center ${
+            sizes="170px"
+            className={`object-contain object-right ${
               m.locked ? "drop-shadow-[0_6px_14px_rgba(0,0,0,0.25)]" : "drop-shadow-[0_10px_16px_rgba(0,0,0,0.22)]"
             }`}
             unoptimized
@@ -233,7 +255,7 @@ function ModuleCardItem({
         </div>
 
         {/* Contenu */}
-        <div className="relative z-20 flex flex-col h-full min-h-[172px] p-5 pr-[140px]">
+        <div className="relative z-20 flex flex-col h-full p-5 pr-[150px]">
           <h2
             className="font-poetsen text-[20px] leading-[1.15] italic"
             style={{ color: m.theme.title }}
@@ -249,20 +271,14 @@ function ModuleCardItem({
           </p>
 
           {/* Badge progression */}
-          <div
-            className="mt-auto self-start inline-flex items-center gap-1.5 rounded-full pl-2 pr-3 py-1 backdrop-blur-sm"
-            style={{ backgroundColor: m.theme.chip }}
-          >
+          <div className="mt-auto inline-flex items-center gap-1.5">
             <ProgressRing
               value={m.progress}
-              size={16}
-              stroke={2.2}
-              color={m.theme.badge}
+              size={18}
+              stroke={2.4}
+              color={m.theme.accent}
             />
-            <span
-              className="font-museo text-[12px] font-semibold tabular-nums"
-              style={{ color: m.theme.badge }}
-            >
+            <span className="font-museo text-[13px] font-semibold tabular-nums text-white">
               {m.progress}%
             </span>
           </div>
