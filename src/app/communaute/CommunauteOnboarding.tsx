@@ -121,10 +121,14 @@ export function CommunauteOnboarding({ onDone }: { onDone: () => void }) {
 function StepOne({ onNext }: { onNext: () => void }) {
   return (
     <div className="flex flex-col h-full">
-      {/* Mosaïque photos inclinée */}
+      {/* Mosaïque photos inclinée (remonte pour déborder par le haut) */}
       <div
-        className="relative shrink-0 pt-4 overflow-hidden"
-        style={{ transform: "rotate(-3deg)", transformOrigin: "50% 0%" }}
+        className="relative shrink-0 overflow-visible"
+        style={{
+          transform: "rotate(-3deg)",
+          transformOrigin: "50% 0%",
+          marginTop: -72,
+        }}
       >
         <PhotoRow
           photos={ROW_1}
@@ -280,6 +284,7 @@ function PhotoRow({
       style={{
         width: w,
         height: h,
+        borderRadius: 28,
         backgroundColor: "var(--color-slate-200)",
       }}
     >
