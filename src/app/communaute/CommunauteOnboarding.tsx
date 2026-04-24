@@ -68,10 +68,11 @@ export function CommunauteOnboarding({ onDone }: { onDone: () => void }) {
 
   return (
     <div
-      className="relative min-h-[100dvh] overflow-hidden"
+      className="relative h-[100dvh] overflow-hidden"
       style={{
         backgroundColor: "var(--color-slate-100)",
         paddingTop: "env(safe-area-inset-top)",
+        paddingBottom: "env(safe-area-inset-bottom)",
       }}
     >
       <AnimatePresence mode="wait">
@@ -119,10 +120,10 @@ export function CommunauteOnboarding({ onDone }: { onDone: () => void }) {
 
 function StepOne({ onNext }: { onNext: () => void }) {
   return (
-    <div className="flex flex-col min-h-[100dvh]">
+    <div className="flex flex-col h-full">
       {/* Mosaïque photos inclinée */}
       <div
-        className="relative pt-10 pb-6 overflow-hidden"
+        className="relative shrink-0 pt-4 overflow-hidden"
         style={{ transform: "rotate(-3deg)", transformOrigin: "50% 0%" }}
       >
         <PhotoRow
@@ -158,7 +159,7 @@ function StepOne({ onNext }: { onNext: () => void }) {
       </div>
 
       {/* Titre + CTA */}
-      <div className="flex-1 flex flex-col items-center justify-end pb-10 px-6">
+      <div className="flex-1 flex flex-col items-center justify-end pb-6 px-6">
         <h1
           className="font-museo leading-[1.05] text-center"
           style={{
@@ -198,27 +199,27 @@ function StepOne({ onNext }: { onNext: () => void }) {
 
 function StepTwo({ onNext }: { onNext: () => void }) {
   return (
-    <div className="flex flex-col min-h-[100dvh]">
+    <div className="flex flex-col h-full">
       {/* Tags défilants */}
-      <div className="pt-4 pb-3">
+      <div className="pt-4 pb-3 shrink-0">
         <TagMarquee duration={28} />
       </div>
 
-      {/* Téléphone avec notifications */}
-      <div className="relative mx-auto w-full max-w-[400px] px-4 mt-2">
+      {/* Téléphone (zone qui absorbe l'espace dispo, crop vertical au besoin) */}
+      <div className="relative flex-1 min-h-0 w-full">
         <Image
           src="/communaute/phone-notifications.jpeg"
           alt=""
-          width={804}
-          height={1438}
-          className="w-full h-auto"
+          fill
+          sizes="100vw"
+          className="object-contain object-top"
           priority
           unoptimized
         />
       </div>
 
       {/* Avatars */}
-      <div className="relative mx-auto w-full max-w-[400px] px-4 -mt-2">
+      <div className="relative mx-auto w-full max-w-[400px] px-4 shrink-0 -mt-4">
         <Image
           src="/communaute/avatar-cluster.png"
           alt=""
@@ -230,7 +231,7 @@ function StepTwo({ onNext }: { onNext: () => void }) {
       </div>
 
       {/* Titre + CTA */}
-      <div className="flex-1 flex flex-col items-center justify-end pb-10 px-6 pt-4">
+      <div className="shrink-0 flex flex-col items-center pb-6 px-6 pt-2">
         <h1 className="text-center font-museo font-semibold text-[32px] leading-tight text-slate-900">
           découvre la
         </h1>
@@ -268,25 +269,25 @@ function PhotoRow({
   direction: "left" | "right";
   duration: number;
 }) {
-  // Taille photo normalisée (carrée, rounded)
-  const size = 96;
+  // Taille demandée : 204×135 (paysage)
+  const w = 204;
+  const h = 135;
   const gap = 6;
 
   const Cell = ({ n }: { n: number }) => (
     <div
       className="shrink-0 overflow-hidden"
       style={{
-        width: size,
-        height: size,
-        borderRadius: 16,
+        width: w,
+        height: h,
         backgroundColor: "var(--color-slate-200)",
       }}
     >
       <Image
         src={photoSrc(n)}
         alt=""
-        width={size * 2}
-        height={size * 2}
+        width={w * 2}
+        height={h * 2}
         className="w-full h-full object-cover"
         unoptimized
       />
