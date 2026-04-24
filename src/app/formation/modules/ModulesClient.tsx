@@ -1,13 +1,12 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Icon } from "@/components/ui/Icon";
 
 type ModuleId = "start" | "entrepreneurship" | "build" | "iteration" | "project";
-
-type Cell = [number, number]; // [col, row] in the 22px grid
 
 type ModuleCard = {
   id: ModuleId;
@@ -22,10 +21,8 @@ type ModuleCard = {
     title: string;       // title text color
     body: string;        // body text color
     accent: string;      // progress ring color (deep-950, june-950…)
-    brick: string;       // colored "brick" cells color
     glow: string;        // inner highlight overlay
   };
-  bricks: Cell[];        // cells to fill as colored bricks
 };
 
 const MODULES: ModuleCard[] = [
@@ -42,10 +39,8 @@ const MODULES: ModuleCard[] = [
       title: "#1a1a1a",
       body: "#1a1a1a",
       accent: "#440665",  // deep-950
-      brick: "rgba(68,6,101,0.22)",
       glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%)",
     },
-    bricks: [[1, 0], [5, 2], [9, 4]],
   },
   {
     id: "entrepreneurship",
@@ -60,10 +55,8 @@ const MODULES: ModuleCard[] = [
       title: "#1a1a1a",
       body: "#1a1a1a",
       accent: "#462004",  // june-950
-      brick: "rgba(70,32,4,0.18)",
       glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 60%)",
     },
-    bricks: [[3, 1], [7, 0], [0, 3]],
   },
   {
     id: "build",
@@ -78,10 +71,8 @@ const MODULES: ModuleCard[] = [
       title: "#1a1a1a",
       body: "#1a1a1a",
       accent: "#50000c",  // error-950
-      brick: "rgba(80,0,12,0.20)",
       glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 60%)",
     },
-    bricks: [[2, 0], [6, 3], [4, 1]],
   },
   {
     id: "iteration",
@@ -97,10 +88,8 @@ const MODULES: ModuleCard[] = [
       title: "rgba(26,26,26,0.72)",
       body: "rgba(26,26,26,0.62)",
       accent: "#272727",  // slate-800
-      brick: "rgba(39,39,39,0.20)",
       glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 60%)",
     },
-    bricks: [[1, 2], [5, 0], [8, 3]],
   },
   {
     id: "project",
@@ -116,14 +105,20 @@ const MODULES: ModuleCard[] = [
       title: "rgba(26,26,26,0.72)",
       body: "rgba(26,26,26,0.62)",
       accent: "#272727",  // slate-800
-      brick: "rgba(39,39,39,0.20)",
       glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 60%)",
     },
-    bricks: [[3, 1], [7, 3], [2, 0]],
   },
 ];
 
 export function ModulesClient() {
+  // La page /formation précédente bloque le scroll (overflow:hidden sur
+  // html/body). On rétablit le scroll pour cette page (sa cleanup n'est
+  // pas toujours rejouée au moment de la navigation côté client).
+  useEffect(() => {
+    document.documentElement.style.overflow = "";
+    document.body.style.overflow = "";
+  }, []);
+
   return (
     <div
       className="min-h-[100dvh] bg-white"
@@ -183,16 +178,16 @@ function ModuleCardItem({
   module: ModuleCard;
   index: number;
 }) {
-  const cardClass = `relative block rounded-[28px] h-[224px] ${
+  const cardClass = `relative block overflow-hidden rounded-[28px] h-[224px] ${
     m.locked ? "cursor-not-allowed" : "active:scale-[0.985]"
   } transition-transform`;
 
   const inner = (
     <>
-        {/* Corps clippé : gradient + grille + briques + reflet */}
+        {/* Fond : gradient + grille + reflet */}
         <div
           aria-hidden
-          className="absolute inset-0 overflow-hidden rounded-[28px]"
+          className="absolute inset-0"
           style={{
             background: m.theme.bg,
             boxShadow: m.locked
@@ -200,20 +195,6 @@ function ModuleCardItem({
               : "0 14px 34px -14px rgba(20,10,40,0.35), inset 0 1px 0 rgba(255,255,255,0.45)",
           }}
         >
-          {/* Briques colorées (quelques carrés remplis) */}
-          {m.bricks.map(([col, row], i) => (
-            <span
-              key={i}
-              className="absolute"
-              style={{
-                left: col * 22,
-                top: row * 22,
-                width: 22,
-                height: 22,
-                background: m.theme.brick,
-              }}
-            />
-          ))}
           {/* Grille "briques" en fond (lignes) */}
           <div
             className="absolute inset-0"
@@ -236,10 +217,10 @@ function ModuleCardItem({
           />
         </div>
 
-        {/* Illustration (collée au bord droit, déborde hors du clip) */}
+        {/* Illustration (clippée par overflow-hidden de la carte) */}
         <div
           aria-hidden
-          className="pointer-events-none absolute right-[-10px] top-1/2 -translate-y-1/2 z-10"
+          className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 z-10"
           style={{ width: 170, height: 170 }}
         >
           <Image
