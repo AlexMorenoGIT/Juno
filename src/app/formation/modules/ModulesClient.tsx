@@ -31,16 +31,16 @@ const MODULES: ModuleCard[] = [
     title: "Le point de départ",
     description:
       "Ton premier projet, c'est toi. Découvre, apprend, développe ta propre identité.",
-    illustration: "/illustrations/modules/module-1.png",
+    illustration: "/illustrations/modules/module-2.png",
     progress: 0,
     theme: {
       bg: "linear-gradient(135deg,#e0b3ff 0%,#cc83fd 45%,#b854f8 100%)",
-      grid: "rgba(255,255,255,0.18)",
-      title: "#ffffff",
-      body: "rgba(255,255,255,0.92)",
-      badge: "#ffffff",
-      chip: "rgba(255,255,255,0.14)",
-      glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 60%)",
+      grid: "rgba(255,255,255,0.22)",
+      title: "#1a1a1a",
+      body: "#1a1a1a",
+      badge: "#1a1a1a",
+      chip: "rgba(255,255,255,0.28)",
+      glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%)",
     },
   },
   {
@@ -48,15 +48,15 @@ const MODULES: ModuleCard[] = [
     title: "L'entrepreneuriat ???",
     description:
       "À la découverte des fondamentaux de l'entrepreneuriat et des réalités qui l'entourent, afin de poser des bases claires.",
-    illustration: "/illustrations/modules/module-2.png",
+    illustration: "/illustrations/modules/module-3.png",
     progress: 0,
     theme: {
       bg: "linear-gradient(135deg,#fff6d3 0%,#ffd86d 40%,#ffa40a 100%)",
-      grid: "rgba(255,255,255,0.28)",
-      title: "#462004",
-      body: "rgba(70,32,4,0.82)",
-      badge: "#82420c",
-      chip: "rgba(255,255,255,0.35)",
+      grid: "rgba(255,255,255,0.32)",
+      title: "#1a1a1a",
+      body: "#1a1a1a",
+      badge: "#1a1a1a",
+      chip: "rgba(255,255,255,0.45)",
       glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 60%)",
     },
   },
@@ -65,16 +65,16 @@ const MODULES: ModuleCard[] = [
     title: "Bâtir mon projet",
     description:
       "Que tu aies une idée ou non, apprends à en faire émerger une et à construire un projet en béton.",
-    illustration: "/illustrations/modules/module-3.png",
+    illustration: "/illustrations/modules/module-4.png",
     progress: 0,
     theme: {
       bg: "linear-gradient(135deg,#ffdde2 0%,#ff94a3 45%,#ff576f 100%)",
-      grid: "rgba(255,255,255,0.25)",
-      title: "#50000c",
-      body: "rgba(80,0,12,0.80)",
-      badge: "#920a1e",
-      chip: "rgba(255,255,255,0.32)",
-      glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 60%)",
+      grid: "rgba(255,255,255,0.28)",
+      title: "#1a1a1a",
+      body: "#1a1a1a",
+      badge: "#1a1a1a",
+      chip: "rgba(255,255,255,0.4)",
+      glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 60%)",
     },
   },
   {
@@ -82,16 +82,16 @@ const MODULES: ModuleCard[] = [
     title: "L'art de l'itération",
     description:
       "Parce qu'un projet n'est jamais parfait du premier coup, découvre comment l'améliorer en avançant.",
-    illustration: "/illustrations/modules/module-4.png",
+    illustration: "/illustrations/modules/module-5.png",
     progress: 0,
     locked: true,
     theme: {
       bg: "linear-gradient(135deg,#d3d3d3 0%,#a3a3a3 45%,#5b5b5b 100%)",
       grid: "rgba(255,255,255,0.18)",
-      title: "rgba(255,255,255,0.92)",
-      body: "rgba(255,255,255,0.75)",
-      badge: "rgba(255,255,255,0.85)",
-      chip: "rgba(255,255,255,0.15)",
+      title: "rgba(26,26,26,0.72)",
+      body: "rgba(26,26,26,0.62)",
+      badge: "rgba(26,26,26,0.72)",
+      chip: "rgba(255,255,255,0.22)",
       glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 60%)",
     },
   },
@@ -100,16 +100,16 @@ const MODULES: ModuleCard[] = [
     title: "Je me projette",
     description:
       "Et si j'essayais de donner vie à mon idée et la faire rentrer dans le monde d'aujourd'hui.",
-    illustration: "/illustrations/modules/module-5.png",
+    illustration: "/illustrations/modules/module-1.png",
     progress: 0,
     locked: true,
     theme: {
       bg: "linear-gradient(135deg,#d3d3d3 0%,#a3a3a3 45%,#5b5b5b 100%)",
       grid: "rgba(255,255,255,0.18)",
-      title: "rgba(255,255,255,0.92)",
-      body: "rgba(255,255,255,0.75)",
-      badge: "rgba(255,255,255,0.85)",
-      chip: "rgba(255,255,255,0.15)",
+      title: "rgba(26,26,26,0.72)",
+      body: "rgba(26,26,26,0.62)",
+      badge: "rgba(26,26,26,0.72)",
+      chip: "rgba(255,255,255,0.22)",
       glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 60%)",
     },
   },
@@ -124,8 +124,8 @@ export function ModulesClient() {
         paddingBottom: "calc(env(safe-area-inset-bottom) + 32px)",
       }}
     >
-      {/* ── Header ─────────────────────────────────────────────── */}
-      <header className="px-6 pt-4 pb-6">
+      {/* ── Back button ───────────────────────────────────────── */}
+      <div className="px-6 pt-4">
         <Link
           href="/formation"
           aria-label="Retour"
@@ -133,21 +133,24 @@ export function ModulesClient() {
         >
           <Icon name="arrow-left" size={24} />
         </Link>
+      </div>
 
-        <h1 className="mt-6 text-slate-900 text-[30px] leading-[1.15] tracking-[-0.01em]">
+      {/* ── Titre ────────────────────────────────────────────────── */}
+      <header className="px-6 py-8 shrink-0">
+        <h1 className="text-slate-900 text-[32px] leading-[1.15]">
           <span className="block font-poppins font-normal">
             Je me forme <span aria-hidden>🎓</span> sur
           </span>
-          <span className="block font-poppins font-semibold">
+          <span className="block font-museo font-semibold">
             l&apos;entrepreneuriat
           </span>
-          <span className="mt-1 flex items-center gap-2 font-poppins font-normal">
+          <span className="flex items-center gap-3 font-poppins font-normal">
             grâce à
             <Image
               src="/brands/lego.png"
               alt="LEGO"
-              width={58}
-              height={33}
+              width={61}
+              height={35}
               priority
               unoptimized
             />
@@ -172,51 +175,56 @@ function ModuleCardItem({
   module: ModuleCard;
   index: number;
 }) {
-  const cardClass = `relative block overflow-hidden rounded-[28px] min-h-[172px] ${
+  const cardClass = `relative block rounded-[28px] min-h-[172px] ${
     m.locked ? "cursor-not-allowed" : "active:scale-[0.985]"
   } transition-transform`;
-  const cardStyle = {
-    background: m.theme.bg,
-    boxShadow: m.locked
-      ? "0 10px 30px -12px rgba(45,45,45,0.45), inset 0 1px 0 rgba(255,255,255,0.25)"
-      : "0 14px 34px -14px rgba(20,10,40,0.35), inset 0 1px 0 rgba(255,255,255,0.45)",
-  };
 
   const inner = (
     <>
-        {/* Grille "briques" en fond */}
+        {/* Corps clippé : gradient + grille + reflet (porte aussi l'ombre) */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0"
+          className="absolute inset-0 overflow-hidden rounded-[28px]"
           style={{
-            backgroundImage: `
-              linear-gradient(${m.theme.grid} 1px, transparent 1px),
-              linear-gradient(90deg, ${m.theme.grid} 1px, transparent 1px)
-            `,
-            backgroundSize: "22px 22px",
-            maskImage:
-              "linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.3) 100%)",
+            background: m.theme.bg,
+            boxShadow: m.locked
+              ? "0 10px 30px -12px rgba(45,45,45,0.45), inset 0 1px 0 rgba(255,255,255,0.25)"
+              : "0 14px 34px -14px rgba(20,10,40,0.35), inset 0 1px 0 rgba(255,255,255,0.45)",
           }}
-        />
+        >
+          {/* Grille "briques" en fond */}
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `
+                linear-gradient(${m.theme.grid} 1px, transparent 1px),
+                linear-gradient(90deg, ${m.theme.grid} 1px, transparent 1px)
+              `,
+              backgroundSize: "22px 22px",
+              maskImage:
+                "linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.3) 100%)",
+              WebkitMaskImage:
+                "linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.3) 100%)",
+            }}
+          />
+          {/* Reflet haut-gauche */}
+          <div
+            className="absolute inset-0"
+            style={{ background: m.theme.glow }}
+          />
+        </div>
 
-        {/* Reflet haut-gauche */}
+        {/* Illustration (déborde hors du clip) */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{ background: m.theme.glow }}
-        />
-
-        {/* Illustration (droite, déborde) */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -right-2 top-1/2 -translate-y-1/2 z-10"
-          style={{ width: 140, height: 140 }}
+          className="pointer-events-none absolute -right-3 top-1/2 -translate-y-1/2 z-10"
+          style={{ width: 158, height: 158 }}
         >
           <Image
             src={m.illustration}
             alt=""
             fill
-            sizes="140px"
+            sizes="158px"
             className={`object-contain object-center ${
               m.locked ? "drop-shadow-[0_6px_14px_rgba(0,0,0,0.25)]" : "drop-shadow-[0_10px_16px_rgba(0,0,0,0.22)]"
             }`}
@@ -225,7 +233,7 @@ function ModuleCardItem({
         </div>
 
         {/* Contenu */}
-        <div className="relative z-20 flex flex-col h-full min-h-[172px] p-5 pr-[130px]">
+        <div className="relative z-20 flex flex-col h-full min-h-[172px] p-5 pr-[140px]">
           <h2
             className="font-poetsen text-[20px] leading-[1.15] italic"
             style={{ color: m.theme.title }}
@@ -266,9 +274,6 @@ function ModuleCardItem({
             aria-hidden
             className="absolute inset-0 z-30 flex items-center justify-center"
           >
-            {/* Léger voile pour atténuer le texte */}
-            <div className="absolute inset-0 bg-slate-900/5" />
-
             {/* Bouton cadenas */}
             <div className="relative">
               <div
@@ -310,14 +315,13 @@ function ModuleCardItem({
       }}
     >
       {m.locked ? (
-        <div className={cardClass} style={cardStyle} aria-disabled>
+        <div className={cardClass} aria-disabled>
           {inner}
         </div>
       ) : (
         <Link
           href={`/formation/modules/${m.id}`}
           className={cardClass}
-          style={cardStyle}
         >
           {inner}
         </Link>
