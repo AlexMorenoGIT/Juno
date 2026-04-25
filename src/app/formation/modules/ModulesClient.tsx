@@ -136,10 +136,16 @@ export function ModulesClient() {
 
   return (
     <div
-      className="relative min-h-[100dvh] bg-white"
+      className="bg-white overflow-y-auto overflow-x-hidden"
       style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: -60,
         paddingTop: "env(safe-area-inset-top)",
-        paddingBottom: "calc(env(safe-area-inset-bottom) + 140px)",
+        paddingBottom: "calc(env(safe-area-inset-bottom) + 200px)",
+        WebkitOverflowScrolling: "touch",
       }}
     >
       {/* ── Back button ───────────────────────────────────────── */}

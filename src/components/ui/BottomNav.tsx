@@ -1,6 +1,6 @@
 "use client";
 
-import { useId } from "react";
+import { useEffect, useId, useRef } from "react";
 import { motion } from "framer-motion";
 
 export type NavTab = "formation" | "communaute" | "boutique" | "profil";
@@ -30,6 +30,27 @@ export function BottomNav({
   className = "",
 }: BottomNavProps) {
   const isGlass = variant === "glass";
+  const glassRef = useRef<HTMLDivElement>(null);
+
+  // iOS WebKit n'active parfois pas backdrop-filter au premier rendu :
+  // on force un reflow/repaint après mount + scroll pour le déclencher.
+  useEffect(() => {
+    if (!isGlass) return;
+    const el = glassRef.current;
+    if (!el) return;
+    const trigger = () => {
+      el.style.transform = "translate3d(0, 0.001px, 0)";
+      requestAnimationFrame(() => {
+        el.style.transform = "translateZ(0)";
+      });
+    };
+    const t1 = window.setTimeout(trigger, 0);
+    const t2 = window.setTimeout(trigger, 250);
+    return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+    };
+  }, [isGlass]);
 
   const navButtons = TAB_IDS.map((id) => {
     const isActive = activeTab === id;
@@ -69,6 +90,7 @@ export function BottomNav({
       {isGlass ? (
         /* ── Variante Glass : Apple-style liquid glass ── */
         <div
+          ref={glassRef}
           className="relative overflow-hidden rounded-full"
           style={{
             backdropFilter: "blur(14px) saturate(160%) brightness(108%)",
