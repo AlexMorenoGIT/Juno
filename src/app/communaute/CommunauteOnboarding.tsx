@@ -128,7 +128,7 @@ function StepOne({ onNext }: { onNext: () => void }) {
         style={{
           transform: "rotate(-3deg)",
           transformOrigin: "50% 0%",
-          marginTop: -16,
+          marginTop: 0,
           marginLeft: -40,
           marginRight: -40,
           width: "calc(100% + 80px)",
@@ -334,9 +334,9 @@ function PhotoRow({
   direction: "left" | "right";
   duration: number;
 }) {
-  // Taille demandée : 240×160 (paysage)
-  const w = 240;
-  const h = 160;
+  // Taille : 200×134 (paysage)
+  const w = 200;
+  const h = 134;
   const gap = 6;
 
   const Cell = ({ n }: { n: number }) => (
@@ -345,6 +345,7 @@ function PhotoRow({
       style={{
         width: w,
         height: h,
+        marginRight: gap,
         borderRadius: 28,
         backgroundColor: "var(--color-slate-200)",
       }}
@@ -360,14 +361,15 @@ function PhotoRow({
     </div>
   );
 
-  // Contenu dupliqué pour boucle seamless (pas de padding dedans sinon
-  // la période de la marquee n'est plus constante)
+  // Contenu dupliqué pour boucle seamless. On utilise marginRight sur
+  // chaque cellule (et pas flex gap) pour que la période de la marquee
+  // soit exactement la largeur d'un set + un gap : translate(-50%) tombe
+  // pile sur le début de la copie, pas d'espace différent au raccord.
   const content = (
-    <div className="flex" style={{ gap }}>
+    <div className="flex">
       {photos.map((n) => (
         <Cell key={`a-${n}`} n={n} />
       ))}
-      <div style={{ width: gap }} />
       {photos.map((n) => (
         <Cell key={`b-${n}`} n={n} />
       ))}

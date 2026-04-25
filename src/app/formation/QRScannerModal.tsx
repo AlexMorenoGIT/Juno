@@ -215,10 +215,11 @@ export function QRScannerModal({ onClose, onNoQR }: Props) {
         </motion.button>
         <button
           type="button"
-          className="mt-4 font-poppins text-white/85 text-[13px] hover:text-white underline-offset-4 hover:underline cursor-pointer bg-transparent border-0 outline-none focus:outline-none select-none"
+          onClick={() => router.push("/formation/modules")}
+          className="mt-4 font-poppins text-white/85 text-[13px] hover:text-white underline underline-offset-4 cursor-pointer bg-transparent border-0 outline-none focus:outline-none select-none"
           style={{ WebkitTapHighlightColor: "transparent" }}
         >
-          Où trouver mon QR code ?
+          Continuer sans QR code
         </button>
       </div>
     </motion.div>

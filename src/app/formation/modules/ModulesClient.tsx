@@ -42,13 +42,14 @@ const MODULES: ModuleCard[] = [
       "Ton premier projet, c'est toi. Découvre, apprend, développe ta propre identité.",
     illustration: "/illustrations/modules/module-2.png",
     progress: 0,
+    locked: true,
     theme: {
-      bg: "linear-gradient(135deg,#e0b3ff 0%,#cc83fd 45%,#b854f8 100%)",
-      grid: "rgba(255,255,255,0.14)",
-      title: "#1a1a1a",
-      body: "#1a1a1a",
-      accent: "#440665",  // deep-950
-      glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 60%)",
+      bg: "linear-gradient(135deg,#d3d3d3 0%,#a3a3a3 45%,#5b5b5b 100%)",
+      grid: "rgba(255,255,255,0.12)",
+      title: "rgba(26,26,26,0.72)",
+      body: "rgba(26,26,26,0.62)",
+      accent: "#272727",
+      glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 60%)",
     },
   },
   {
@@ -58,13 +59,14 @@ const MODULES: ModuleCard[] = [
       "À la découverte des fondamentaux de l'entrepreneuriat et des réalités qui l'entourent, afin de poser des bases claires.",
     illustration: "/illustrations/modules/module-3.png",
     progress: 0,
+    locked: true,
     theme: {
-      bg: "linear-gradient(135deg,#fff6d3 0%,#ffd86d 40%,#ffa40a 100%)",
-      grid: "rgba(130,66,12,0.18)",
-      title: "#1a1a1a",
-      body: "#1a1a1a",
-      accent: "#462004",  // june-950
-      glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 60%)",
+      bg: "linear-gradient(135deg,#d3d3d3 0%,#a3a3a3 45%,#5b5b5b 100%)",
+      grid: "rgba(255,255,255,0.12)",
+      title: "rgba(26,26,26,0.72)",
+      body: "rgba(26,26,26,0.62)",
+      accent: "#272727",
+      glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 60%)",
     },
   },
   {
@@ -74,13 +76,14 @@ const MODULES: ModuleCard[] = [
       "Que tu aies une idée ou non, apprends à en faire émerger une et à construire un projet en béton.",
     illustration: "/illustrations/modules/module-4.png",
     progress: 0,
+    locked: true,
     theme: {
-      bg: "linear-gradient(135deg,#ffdde2 0%,#ff94a3 45%,#ff576f 100%)",
-      grid: "rgba(146,10,30,0.16)",
-      title: "#1a1a1a",
-      body: "#1a1a1a",
-      accent: "#50000c",  // error-950
-      glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 60%)",
+      bg: "linear-gradient(135deg,#d3d3d3 0%,#a3a3a3 45%,#5b5b5b 100%)",
+      grid: "rgba(255,255,255,0.12)",
+      title: "rgba(26,26,26,0.72)",
+      body: "rgba(26,26,26,0.62)",
+      accent: "#272727",
+      glow: "radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 60%)",
     },
   },
   {
@@ -256,7 +259,9 @@ function ModuleCardItem({
             fill
             sizes="170px"
             className={`object-contain object-right ${
-              m.locked ? "drop-shadow-[0_6px_14px_rgba(0,0,0,0.25)]" : "drop-shadow-[0_10px_16px_rgba(0,0,0,0.22)]"
+              m.locked
+                ? "drop-shadow-[0_6px_14px_rgba(0,0,0,0.25)] grayscale opacity-70"
+                : "drop-shadow-[0_10px_16px_rgba(0,0,0,0.22)]"
             }`}
             unoptimized
           />
