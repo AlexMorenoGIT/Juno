@@ -39,19 +39,17 @@ const TAGS: Tag[] = [
 ];
 
 /* ──────────────────────────────────────────────────────────────
-   Titre dégradé "communauté" — même dégradé que /welcome
-   (orange → violet, #FF8C00 → #8F21CF, text-clip)
+   Titre dégradé "communauté" — même dégradé multicolore que /welcome
+   (violet → orange → bleu → rouge, text-clip)
    ────────────────────────────────────────────────────────────── */
 
 function ColoredCommunaute() {
   return (
     <span
-      className="font-museo font-semibold text-[40px] leading-none"
+      className="font-museo font-semibold text-[40px] leading-none bg-clip-text text-transparent"
       style={{
-        background: "linear-gradient(90deg, #FF8C00 0%, #8F21CF 100%)",
-        WebkitBackgroundClip: "text",
-        WebkitTextFillColor: "transparent",
-        backgroundClip: "text",
+        backgroundImage:
+          "linear-gradient(90deg, #661C8C 0%, #FF8C00 28%, #0092BE 75%, #FF1A3B 97%)",
       }}
     >
       communauté
@@ -79,6 +77,7 @@ export function CommunauteOnboarding({ onDone }: { onDone: () => void }) {
         {step === 1 ? (
           <motion.div
             key="step-1"
+            className="h-full"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -89,6 +88,7 @@ export function CommunauteOnboarding({ onDone }: { onDone: () => void }) {
         ) : (
           <motion.div
             key="step-2"
+            className="h-full"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -121,13 +121,17 @@ export function CommunauteOnboarding({ onDone }: { onDone: () => void }) {
 function StepOne({ onNext }: { onNext: () => void }) {
   return (
     <div className="flex flex-col h-full">
-      {/* Mosaïque photos inclinée (remonte pour déborder par le haut) */}
+      {/* Mosaïque photos inclinée (remonte pour déborder par le haut,
+          élargie pour éviter le coin blanc à gauche dû à la rotation) */}
       <div
         className="relative shrink-0 overflow-visible"
         style={{
           transform: "rotate(-3deg)",
           transformOrigin: "50% 0%",
-          marginTop: -72,
+          marginTop: -16,
+          marginLeft: -40,
+          marginRight: -40,
+          width: "calc(100% + 80px)",
         }}
       >
         <PhotoRow
@@ -203,56 +207,113 @@ function StepOne({ onNext }: { onNext: () => void }) {
 
 function StepTwo({ onNext }: { onNext: () => void }) {
   return (
-    <div className="flex flex-col h-full">
-      {/* Tags défilants */}
-      <div className="pt-4 pb-3 shrink-0">
-        <TagMarquee duration={28} />
-      </div>
-
-      {/* Téléphone (zone qui absorbe l'espace dispo, crop vertical au besoin) */}
-      <div className="relative flex-1 min-h-0 w-full">
+    <div
+      className="relative h-full"
+      style={{ backgroundColor: "#F5F5F5" }}
+    >
+      {/* Téléphone : absolute, derrière tout */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 -translate-x-1/2"
+        style={{ top: 120, width: 380, height: "75vh", zIndex: 1 }}
+      >
         <Image
-          src="/communaute/phone-notifications.jpeg"
+          src="/communaute/phone-mockup.png"
           alt=""
           fill
-          sizes="100vw"
+          sizes="(max-width: 460px) 100vw, 460px"
           className="object-contain object-top"
           priority
           unoptimized
         />
       </div>
 
-      {/* Avatars */}
-      <div className="relative mx-auto w-full max-w-[400px] px-4 shrink-0 -mt-4">
-        <Image
-          src="/communaute/avatar-cluster.png"
-          alt=""
-          width={732}
-          height={238}
-          className="w-full h-auto"
-          unoptimized
-        />
+      {/* Dégradés diagonaux en haut (décor, par-dessus le téléphone) */}
+      <DiagonalGradients />
+
+      {/* Tags défilants en haut */}
+      <div className="absolute inset-x-0 top-0 z-20 pt-12 pb-3">
+        <TagMarquee duration={28} />
       </div>
 
-      {/* Titre + CTA */}
-      <div className="shrink-0 flex flex-col items-center pb-6 px-6 pt-2">
-        <h1 className="text-center font-museo font-semibold text-[32px] leading-tight text-slate-900">
-          découvre la
-        </h1>
-        <div className="mt-3">
-          <ColoredCommunaute />
+      {/* Bloc bas — F5F5F5, hauteur auto qui démarre un peu au-dessus du
+          cluster d'avatars. */}
+      <div
+        className="absolute inset-x-0 bottom-0 z-20 flex flex-col items-center px-6 pt-6"
+        style={{
+          backgroundColor: "#F5F5F5",
+          paddingBottom: "calc(env(safe-area-inset-bottom) + 20px)",
+        }}
+      >
+        {/* Notifications card juste au-dessus du dégradé */}
+        <div
+          aria-hidden
+          className="absolute left-0 right-0 flex justify-center pointer-events-none px-6"
+          style={{ bottom: "calc(100% + 56px)" }}
+        >
+          <Image
+            src="/communaute/notif-card.png"
+            alt=""
+            width={652}
+            height={275}
+            className="w-full max-w-[360px] h-auto"
+            unoptimized
+          />
         </div>
 
-        <StepDots current={2} total={2} className="mt-6" />
+        {/* Bande de transition 40px : dégradé F5F5F5 (transparent → 90%) */}
+        <div
+          aria-hidden
+          className="absolute left-0 right-0 pointer-events-none"
+          style={{
+            bottom: "100%",
+            height: 40,
+            background:
+              "linear-gradient(180deg, rgba(245,245,245,0) 0%, rgba(245,245,245,0.90) 86%, rgba(245,245,245,0.90) 100%)",
+          }}
+        />
+        <div className="w-full flex flex-col items-center">
+          {/* Cluster d'avatars juste au-dessus du titre */}
+          <div className="w-full max-w-[320px] mb-4">
+            <Image
+              src="/communaute/avatar-cluster.png"
+              alt=""
+              width={732}
+              height={238}
+              className="w-full h-auto"
+              unoptimized
+            />
+          </div>
 
-        <button
-          type="button"
-          onClick={onNext}
-          className="mt-6 w-full h-[56px] rounded-full font-poppins font-semibold text-white text-[16px] active:scale-[0.98] transition-transform"
-          style={{ background: "var(--color-june-600)" }}
-        >
-          Suivant
-        </button>
+          <h1
+            className="font-museo leading-[1.05] text-center"
+            style={{
+              fontSize: 40,
+              fontWeight: 600,
+              color: "#1a1a1a",
+              letterSpacing: "-0.01em",
+            }}
+          >
+            découvre la
+          </h1>
+          <div className="mt-2">
+            <ColoredCommunaute />
+          </div>
+
+          <StepDots current={2} total={2} className="mt-6" />
+
+          <button
+            type="button"
+            onClick={onNext}
+            className="mt-6 w-full h-14 rounded-full font-poppins font-semibold text-white text-base tracking-wide active:scale-[0.98] transition-transform"
+            style={{
+              background: "linear-gradient(135deg, #FF8C00 0%, #e07800 100%)",
+              boxShadow: "0 8px 28px rgba(255,140,0,0.38)",
+            }}
+          >
+            Suivant
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -273,9 +334,9 @@ function PhotoRow({
   direction: "left" | "right";
   duration: number;
 }) {
-  // Taille demandée : 204×135 (paysage)
-  const w = 204;
-  const h = 135;
+  // Taille demandée : 240×160 (paysage)
+  const w = 240;
+  const h = 160;
   const gap = 6;
 
   const Cell = ({ n }: { n: number }) => (
@@ -346,13 +407,14 @@ function TagMarquee({ duration }: { duration: number }) {
       {TAGS.concat(TAGS).map((t, i) => (
         <span
           key={i}
-          className="shrink-0 rounded-full font-museo font-semibold text-[10px] px-2.5 py-2 whitespace-nowrap"
+          className="shrink-0 rounded-full font-museo font-semibold text-[10px] whitespace-nowrap"
           style={{
             backgroundColor: t.bg,
             borderWidth: "0.5px",
             borderStyle: "solid",
             borderColor: t.border,
             color: t.fg,
+            padding: "4px 10px",
           }}
         >
           {t.label}
@@ -372,6 +434,67 @@ function TagMarquee({ duration }: { duration: number }) {
       >
         {content}
       </div>
+    </div>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────
+   DiagonalGradients — 3 rectangles 670×250 inclinés à 30°
+   en diagonale du milieu-gauche vers le coin supérieur droit
+   ────────────────────────────────────────────────────────────── */
+
+function DiagonalGradients() {
+  const W = 670;
+  const H = 420;
+
+  // Les rectangles sont centrés horizontalement sur le viewport puis
+  // tournés à -30°. Centrage via left:50% + marginLeft:-W/2 → la zone
+  // de fade des dégradés reste visible des deux côtés.
+  const baseStyle = {
+    position: "absolute" as const,
+    width: W,
+    height: H,
+    left: "50%",
+    marginLeft: -W / 2,
+    transform: "rotate(-30deg)",
+    transformOrigin: "50% 50%",
+    pointerEvents: "none" as const,
+  };
+
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-x-0 top-0 overflow-hidden"
+      style={{ height: 620, zIndex: 5 }}
+    >
+      {/* Rect 2 — bleu, légèrement au-dessus, opacité globale 70% */}
+      <div
+        style={{
+          ...baseStyle,
+          top: -20,
+          opacity: 0.7,
+          background:
+            "linear-gradient(180deg, rgba(3,206,246,0) 0%, rgba(3,206,246,0.30) 50%, rgba(3,206,246,0) 100%)",
+        }}
+      />
+      {/* Rect 1 — violet, position de base */}
+      <div
+        style={{
+          ...baseStyle,
+          top: 10,
+          background:
+            "linear-gradient(180deg, rgba(184,84,248,0) 0%, rgba(184,84,248,0.20) 50%, rgba(184,84,248,0) 100%)",
+        }}
+      />
+      {/* Rect 3 — jaune, à moitié en dessous du rect 2 */}
+      <div
+        style={{
+          ...baseStyle,
+          top: -20 + H / 2,
+          background:
+            "linear-gradient(180deg, rgba(255,187,50,0) 0%, rgba(255,187,50,0.30) 50%, rgba(255,187,50,0) 100%)",
+        }}
+      />
     </div>
   );
 }

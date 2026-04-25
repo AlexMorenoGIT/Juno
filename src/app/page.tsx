@@ -20,6 +20,12 @@ export default function GatePage() {
   const [showIosSheet, setShowIosSheet] = useState(false);
 
   useEffect(() => {
+    // En dev, on saute le gate PWA pour pouvoir tester depuis le navigateur.
+    if (process.env.NODE_ENV !== "production") {
+      router.replace("/formation");
+      return;
+    }
+
     const ua = navigator.userAgent;
     const isStandalone =
       window.matchMedia("(display-mode: standalone)").matches ||

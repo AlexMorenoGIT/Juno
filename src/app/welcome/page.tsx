@@ -6,15 +6,14 @@ import { motion, AnimatePresence, useDragControls } from "framer-motion";
 import Image from "next/image";
 import { Logo } from "@/components/brand/Logo";
 import { Icon } from "@/components/ui/Icon";
-import { illustrations } from "@/lib/illustrations";
 import { createClient } from "@/utils/supabase/client";
 
 type AuthMode = "login" | "signup";
 
 /* ── Géométrie ───────────────────────────────────────────────────────── */
 
-const CIRCLE_1 = 96;   // cercle central (autour du monogramme)
-const CIRCLE_2 = 220;  // cercle moyen
+const CIRCLE_1 = 110;  // cercle central (autour du monogramme)
+const CIRCLE_2 = 260;  // cercle moyen
 
 // Décalage vertical des cercles 1 & 2 (descendus dans la scène)
 const CORE_DY = 42;
@@ -23,8 +22,8 @@ const CORE_DY = 42;
 const INNER_R = CIRCLE_2 / 2;
 
 // Cercle 3 : rayon plus grand + centre plus profond → arc moins arrondi
-const OUTER_R = 290;
-const OUTER_CY = 115;
+const OUTER_R = 340;
+const OUTER_CY = 130;
 
 const rad = (d: number) => (d * Math.PI) / 180;
 
@@ -63,21 +62,23 @@ const onOuter = (angleDeg: number, w: number, h: number, fx: number, fy: number,
 });
 
 // 6 éléments placés "random" autour du cercle 2, équidistants
+// Shapes inner : 4-1, 1, 8-1
 const INNER_ITEMS: OrbitItem[] = [
-  onInner(-42, 66, 66, 4, -6, 5.6, 8,  "shape",  illustrations.torus2),
-  onInner(38,  58, 58, -3, -5, 6.2, 0,  "avatar", "/avatars/avatar-pink.png"),
-  onInner(98,  83, 83, -4, 3,  5.0, -6, "shape",  illustrations.cylindreTeal),
-  onInner(148, 60, 60, 3,  4,  6.8, 0,  "avatar", "/avatars/avatar-diploma.png"),
-  onInner(-148,73, 73, -5, 3,  5.4, 10, "shape",  illustrations.cube),
-  onInner(-98, 58, 58, 4,  -4, 6.0, 0,  "avatar", "/avatars/avatar-yellow.png"),
+  onInner(-42, 70, 70, 4, -6, 5.6, 8,  "shape",  "/illustrations/welcome/welcome-4.png"),
+  onInner(38,  62, 62, -3, -5, 6.2, 0,  "avatar", "/avatars/avatar-pink.png"),
+  onInner(98,  86, 86, -4, 3,  5.0, -6, "shape",  "/illustrations/welcome/welcome-1.png"),
+  onInner(148, 64, 64, 3,  4,  6.8, 0,  "avatar", "/avatars/avatar-diploma.png"),
+  onInner(-148,76, 76, -5, 3,  5.4, 10, "shape",  "/illustrations/welcome/welcome-8.png"),
+  onInner(-98, 62, 62, 4,  -4, 6.0, 0,  "avatar", "/avatars/avatar-yellow.png"),
 ];
 
 // 4 éléments sur l'arc du cercle 3 (partie haute uniquement)
+// Shapes outer : 5-1, 3-1
 const OUTER_ITEMS: OrbitItem[] = [
-  onOuter(-30, 72, 72, -4, -6, 7.0, 8,  "shape",  illustrations.spiral),
-  onOuter(-10, 54, 54, 3,  -5, 6.4, 0,  "avatar", "/avatars/avatar-blond.png"),
-  onOuter(11,  76, 76, -3, -5, 7.6, -10, "shape", illustrations.polyhedron),
-  onOuter(30,  54, 54, 4,  -4, 6.8, 0,  "avatar", "/avatars/avatar-red.png"),
+  onOuter(-30, 76, 76, -4, -6, 7.0, 8,  "shape",  "/illustrations/welcome/welcome-5.png"),
+  onOuter(-10, 58, 58, 3,  -5, 6.4, 0,  "avatar", "/avatars/avatar-blond.png"),
+  onOuter(11,  78, 78, -3, -5, 7.6, -10, "shape", "/illustrations/welcome/welcome-3.png"),
+  onOuter(30,  58, 58, 4,  -4, 6.8, 0,  "avatar", "/avatars/avatar-red.png"),
 ];
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -320,15 +321,20 @@ export default function WelcomePage() {
                     />
                   </div>
                 ) : (
-                  <Image
-                    src={it.src}
-                    alt=""
-                    width={it.w * 2}
-                    height={it.h * 2}
-                    quality={100}
-                    unoptimized
+                  <div
                     style={{ width: it.w, height: it.h }}
-                  />
+                    className="relative"
+                  >
+                    <Image
+                      src={it.src}
+                      alt=""
+                      fill
+                      sizes={`${it.w}px`}
+                      quality={100}
+                      unoptimized
+                      className="object-contain"
+                    />
+                  </div>
                 )}
               </motion.div>
             );
@@ -339,7 +345,7 @@ export default function WelcomePage() {
       {/* ── Texte + CTA ────────────────────────────────────────────── */}
       <motion.div
         className="relative z-10 px-7 shrink-0"
-        style={{ paddingBottom: "max(4rem, calc(env(safe-area-inset-bottom) + 2.5rem))" }}
+        style={{ paddingBottom: "max(7rem, calc(env(safe-area-inset-bottom) + 5.5rem))" }}
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6, duration: 0.55, ease }}
@@ -349,7 +355,7 @@ export default function WelcomePage() {
         </div>
 
         <h1
-          className="font-museo leading-[1.05] mb-7 text-center"
+          className="font-museo leading-[1.05] mb-14 text-center"
           style={{
             fontSize: 40,
             fontWeight: 600,
@@ -360,11 +366,9 @@ export default function WelcomePage() {
           bienvenue sur
           <br />
           <span
+            className="bg-clip-text text-transparent"
             style={{
-              background: "linear-gradient(90deg, #FF8C00 0%, #8F21CF 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
+              backgroundImage: "linear-gradient(90deg, #661C8C 0%, #FF8C00 28%, #0092BE 75%, #FF1A3B 97%)",
             }}
           >
             l&apos;application

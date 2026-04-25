@@ -24,7 +24,9 @@ export function CommunauteClient({ userEmail }: { userEmail: string | null }) {
   const [seen, setSeen] = useState(false);
   const [tab, setTab] = useState<NavTab>("communaute");
 
-  const forceOnboard = userEmail !== null && ALWAYS_ONBOARD_EMAILS.has(userEmail);
+  const forceOnboard =
+    process.env.NODE_ENV !== "production" ||
+    (userEmail !== null && ALWAYS_ONBOARD_EMAILS.has(userEmail));
 
   useEffect(() => {
     document.documentElement.style.overflow = "";
